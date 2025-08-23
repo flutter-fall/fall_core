@@ -64,5 +64,21 @@ init/services.g.dart
 # Coverage
 coverage/
 
+# Windows specific
+/windows/flutter/ephemeral/
+/build/windows/
+
+# CMake build files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+install_manifest.txt
+*.vcxproj*
+*.sln
+*.user
+
+# Visual Studio Code
+.vscode/
+
 # Exceptions to above rules.
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
