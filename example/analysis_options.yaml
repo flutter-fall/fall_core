@@ -1,0 +1,47 @@
+# This file configures the analyzer, which statically analyzes Dart code to
+# check for errors, warnings, and lints.
+#
+# The issues identified by the analyzer are surfaced in the UI of Dart-enabled
+# IDEs (https://dart.dev/tools#ides-and-editors). The analyzer can also be
+# invoked from the command line by running `flutter analyze`.
+
+# The following line activates a set of recommended lints for Flutter apps,
+# packages, and plugins designed to encourage good coding practices.
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  # 排除生成的文件
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.aop.dart"
+    - "build/**"
+    - ".dart_tool/**"
+    - "init/**"
+
+  # 强制错误
+  strong-mode:
+    implicit-casts: false
+    implicit-dynamic: false
+
+linter:
+  rules:
+    # 启用额外的代码规范
+    avoid_print: false  # 允许在example中使用print
+    prefer_single_quotes: true
+    sort_constructors_first: true
+    sort_unnamed_constructors_first: true
+    always_declare_return_types: true
+    avoid_redundant_argument_values: true
+    prefer_const_constructors: true
+    prefer_const_declarations: true
+    prefer_final_fields: true
+    prefer_final_locals: true
+    
+    # 文档相关
+    public_member_api_docs: false  # example项目不强制要求API文档
+    
+    # 导入相关
+    directives_ordering: true
+    
+    # 空值安全
+    avoid_null_checks_in_equality_operators: true
