@@ -1,0 +1,131 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+/build/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# Generated files - 代码生成器生成的文件
+**/*.g.dart
+**/*.aop.dart
+**/*.freezed.dart
+**/*.gr.dart
+**/*.chopper.dart
+**/*.config.dart
+**/*.part.dart
+
+# Build runner generated files
+*.g.part
+/lib/**/*.g.dart
+/lib/**/*.aop.dart
+
+# Analysis options related
+/analysis_options.yaml.backup
+
+# Test related
+/test/reports/
+/coverage/
+
+# Platform specific build outputs
+/windows/flutter/ephemeral/
+/linux/flutter/ephemeral/
+/macos/Flutter/ephemeral/
+/web/
+
+# Flutter version file
+.flutter-version
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# IDE generated files
+.project
+.classpath
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# Temporary files
+*.tmp
+*.temp
+~*
+
+# Logs
+*.log
+logs/
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Node.js (if using any web build tools)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Package files
+*.tar.gz
+*.zip
+*.rar
+*.7z
+
+# Firebase (if used)
+.firebase/
+firebase-debug.log
+firestore-debug.log
+
+# GetXF Framework specific - 框架特定的生成文件
+/lib/init/auto_scan.g.dart
+/lib/**/*.aop.g.dart
+/lib/**/generated/
+
+# Build runner cache
+.dart_tool/build/
