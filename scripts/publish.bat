@@ -1,81 +1,101 @@
 @echo off
-REM Fall Core 发布脚本 (Windows 版本)
-REM 自动化发布到 pub.dev 的流程
+chcp 65001 >nul
+REM Fall Core Publishing Script (Windows Version)
+REM Automated publishing process to pub.dev
 
 setlocal enabledelayedexpansion
 
-echo 🚀 Fall Core 发布脚本
-echo ====================
+echo.
+echo ===========================================
+echo    Fall Core Publishing Script
+echo ===========================================
+echo.
 
-REM 检查当前是否在项目根目录
+REM Check if we are in the project root directory
 if not exist "pubspec.yaml" (
-    echo ❌ 错误: 请在项目根目录执行此脚本
+    echo [ERROR] Please run this script from the project root directory
+    echo.
     pause
     exit /b 1
 )
 
-REM 检查是否有未提交的更改
+REM Check for uncommitted changes
 git status --porcelain > temp_status.txt
 set /p git_status=<temp_status.txt
 del temp_status.txt
 
 if not "!git_status!"=="" (
-    echo ⚠️  警告: 存在未提交的更改
-    echo 请先提交所有更改后再发布
+    echo [WARNING] Uncommitted changes detected
+    echo Please commit all changes before publishing
+    echo.
     git status --short
+    echo.
     pause
     exit /b 1
 )
 
-REM 获取当前版本
+REM Get current version
 for /f "tokens=2" %%i in ('findstr "^version:" pubspec.yaml') do set CURRENT_VERSION=%%i
-echo 📦 当前版本: !CURRENT_VERSION!
+echo [INFO] Current version: !CURRENT_VERSION!
+echo.
 
-REM 清理项目
-echo 🧹 清理项目...
+REM Clean project
+echo [STEP 1/5] Cleaning project...
 call flutter clean
 call flutter pub get
+echo.
 
-REM 运行测试
-echo 🧪 运行测试...
+REM Run tests
+echo [STEP 2/5] Running tests...
 if exist "test" (
     call flutter test
 ) else (
-    echo ⚠️  未找到测试目录，跳过测试
+    echo [WARNING] No test directory found, skipping tests
 )
+echo.
 
-REM 运行代码分析
-echo 🔍 运行代码分析...
+REM Run code analysis
+echo [STEP 3/5] Running code analysis...
 call flutter analyze
+echo.
 
-REM 检查发布准备情况
-echo 📋 检查发布准备情况...
+REM Check publishing readiness
+echo [STEP 4/5] Checking publishing readiness...
 call dart pub publish --dry-run
+echo.
 
-REM 确认发布
+REM Confirm publishing
+echo [STEP 5/5] Publishing confirmation
+echo ========================================
+echo All checks passed!
 echo.
-echo ✅ 所有检查通过!
-echo 📋 发布信息:
-echo    - 版本: !CURRENT_VERSION!
-echo    - 包名: fall_core
+echo Package Information:
+echo   - Name: fall_core
+echo   - Version: !CURRENT_VERSION!
+echo   - Target: pub.dev
 echo.
-set /p confirm="确认发布到 pub.dev? (y/N): "
+set /p confirm="Do you want to publish to pub.dev? (y/N): "
 
 if /i "!confirm!"=="y" (
-    echo 🚀 发布到 pub.dev...
+    echo.
+    echo [PUBLISHING] Publishing to pub.dev...
     call dart pub publish
     
-    REM 创建 Git 标签
-    echo 🏷️  创建 Git 标签...
+    REM Create Git tag
+    echo.
+    echo [GIT] Creating Git tag...
     git tag "v!CURRENT_VERSION!"
     git push origin "v!CURRENT_VERSION!"
     
     echo.
-    echo 🎉 发布成功!
-    echo 📦 包地址: https://pub.dev/packages/fall_core
-    echo 🏷️  Git 标签: v!CURRENT_VERSION!
+    echo ==========================================
+    echo          PUBLISHING SUCCESSFUL!
+    echo ==========================================
+    echo Package URL: https://pub.dev/packages/fall_core
+    echo Git Tag: v!CURRENT_VERSION!
+    echo.
 ) else (
-    echo ❌ 发布已取消
+    echo.
+    echo [CANCELLED] Publishing cancelled by user
+    echo.
 )
-
-pause
