@@ -19,20 +19,6 @@ if not exist "pubspec.yaml" (
     exit /b 1
 )
 
-REM Check for uncommitted changes
-git status --porcelain > temp_status.txt
-set /p git_status=<temp_status.txt
-del temp_status.txt
-
-if not "!git_status!"=="" (
-    echo [WARNING] Uncommitted changes detected
-    echo Please commit all changes before publishing
-    echo.
-    git status --short
-    echo.
-    pause
-    exit /b 1
-)
 
 REM Get current version
 for /f "tokens=2" %%i in ('findstr "^version:" pubspec.yaml') do set CURRENT_VERSION=%%i
