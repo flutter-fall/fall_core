@@ -1,6 +1,5 @@
 import 'dart:async';
-import 'package:analyzer/dart/element/element.dart';
-import 'package:analyzer/dart/element/type.dart';
+import 'package:analyzer/dart/element/element2.dart';
 import 'package:build/build.dart';
 import 'package:source_gen/source_gen.dart';
 import '../annotations/annotations.dart';
@@ -12,16 +11,16 @@ import '../annotations/annotations.dart';
 class AopGenerator extends GeneratorForAnnotation<Aop> {
   @override
   FutureOr<String> generateForAnnotatedElement(
-    Element element,
+    Element2 element,
     ConstantReader annotation,
     BuildStep buildStep,
   ) {
     // 只处理类
-    if (element is! ClassElement) {
+    if (element is! ClassElement2) {
       throw InvalidGenerationSourceError('@Aop注解只能用于类', element: element);
     }
 
-    final className = element.name ?? 'UnknownClass';
+    final className = element.name3 ?? 'UnknownClass';
     final enhancedClassName = '${className}Aop';
 
     // 获取注解参数
@@ -52,7 +51,7 @@ class AopGenerator extends GeneratorForAnnotation<Aop> {
     String enhancedClassName,
     String? aopName,
     List<String>? allowedHooks,
-    ClassElement originalClass,
+    ClassElement2 originalClass,
   ) {
     final buffer = StringBuffer();
 
@@ -86,19 +85,19 @@ class AopGenerator extends GeneratorForAnnotation<Aop> {
   /// 生成构造函数
   void _generateConstructors(
     StringBuffer buffer,
-    ClassElement originalClass,
+    ClassElement2 originalClass,
     String enhancedClassName,
   ) {
-    for (final constructor in originalClass.constructors) {
+    for (final constructor in originalClass.constructors2) {
       if (constructor.isPrivate) continue;
 
       final isDefault = constructor.isDefaultConstructor;
-      final constructorName = isDefault ? '' : '.${constructor.name}';
+      final constructorName = isDefault ? '' : '.${constructor.name3}';
       final params = constructor.formalParameters
           .map(
             (p) => {
-              'name': p.name ?? 'param',
-              'type': p.type.getDisplayString(withNullability: true),
+              'name': p.name3 ?? 'param',
+              'type': p.type.getDisplayString(),
             },
           )
           .toList();
@@ -128,10 +127,10 @@ class AopGenerator extends GeneratorForAnnotation<Aop> {
   /// 生成增强方法
   void _generateMethods(
     StringBuffer buffer,
-    ClassElement originalClass,
+    ClassElement2 originalClass,
     List<String>? allowedHooks,
   ) {
-    for (final method in originalClass.methods) {
+    for (final method in originalClass.methods2) {
       // 跳过私有方法、静态方法、抽象方法
       if (method.isPrivate || method.isStatic || method.isAbstract) continue;
 
@@ -143,14 +142,14 @@ class AopGenerator extends GeneratorForAnnotation<Aop> {
   }
 
   /// 检查方法是否有@NoAop注解
-  bool _hasNoAopAnnotation(MethodElement method) {
+  bool _hasNoAopAnnotation(MethodElement2 method) {
     // 使用正确的analyzer API访问注解列表
-    final annotations = method.metadata.annotations;
+    final annotations = method.metadata2.annotations;
 
     for (final annotation in annotations) {
       try {
-        final element = annotation.element;
-        if (element?.enclosingElement?.name == 'NoAop') {
+        final element = annotation.element2;
+        if (element?.enclosingElement2?.name3 == 'NoAop') {
           return true;
         }
       } catch (e) {
@@ -163,20 +162,18 @@ class AopGenerator extends GeneratorForAnnotation<Aop> {
   /// 生成单个方法
   void _generateMethod(
     StringBuffer buffer,
-    MethodElement method,
+    MethodElement2 method,
     List<String>? allowedHooks,
   ) {
-    final methodName = method.name ?? 'unknownMethod';
-    final returnType = method.returnType.getDisplayString(
-      withNullability: true,
-    );
+    final methodName = method.name3 ?? 'unknownMethod';
+    final returnType = method.returnType.getDisplayString();
     final isVoid = returnType == 'void';
 
     final params = method.formalParameters
         .map(
           (p) => {
-            'name': p.name ?? 'param',
-            'type': p.type.getDisplayString(withNullability: true),
+            'name': p.name3 ?? 'param',
+            'type': p.type.getDisplayString(),
           },
         )
         .toList();

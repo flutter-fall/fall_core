@@ -14,9 +14,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # UI and icons
-  cupertino_icons: ^1.0.8
-
   # State management and dependency injection
   get: ^4.7.2
 
@@ -40,19 +37,8 @@ dev_dependencies:
   # Code generation
   build_runner: ^2.7.0
   source_gen: ^3.1.0
-  analyzer: ^8.1.0
+  analyzer: ^7.5.5
 
 # Flutter configuration
 flutter:
   uses-material-design: true
-
-  # Example assets (可以根据需要添加)
-  # assets:
-  #   - assets/images/
-  #   - assets/icons/
-
-  # Example fonts (可以根据需要添加)
-  # fonts:
-  #   - family: Roboto
-  #     fonts:
-  #       - asset: fonts/Roboto-Regular.ttf

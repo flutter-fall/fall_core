@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:analyzer/dart/element/element.dart';
+import 'package:analyzer/dart/element/element2.dart';
 import 'package:build/build.dart';
 import 'package:source_gen/source_gen.dart';
 import 'package:glob/glob.dart';
@@ -33,7 +33,7 @@ class ServiceGenerator extends Builder {
           ),
         )) {
           final element = annotatedElement.element;
-          if (element is ClassElement) {
+          if (element is ClassElement2) {
             // annotatedElement.annotation已经是ConstantReader类型
             services.add(
               ServiceInfo.fromElement(
@@ -194,7 +194,7 @@ class ServiceInfo {
   });
 
   factory ServiceInfo.fromElement(
-    ClassElement element,
+    ClassElement2 element,
     ConstantReader annotation,
     String filePath,
   ) {
@@ -222,7 +222,7 @@ class ServiceInfo {
     }
 
     return ServiceInfo(
-      className: element.name ?? 'UnknownClass',
+      className: element.name3 ?? 'UnknownClass',
       importPath: importPath,
       serviceName: serviceName,
       lazy: lazy,
@@ -233,13 +233,13 @@ class ServiceInfo {
   }
 
   /// 检查类是否有@Aop注解
-  static bool _hasAopAnnotation(ClassElement element) {
-    final annotations = element.metadata.annotations;
+  static bool _hasAopAnnotation(ClassElement2 element) {
+    final annotations = element.metadata2.annotations;
 
     for (final annotation in annotations) {
       try {
-        final annotationElement = annotation.element;
-        if (annotationElement?.enclosingElement?.name == 'Aop') {
+        final annotationElement = annotation.element2;
+        if (annotationElement?.enclosingElement2?.name3 == 'Aop') {
           return true;
         }
       } catch (e) {
@@ -250,16 +250,16 @@ class ServiceInfo {
   }
 
   /// 收集标注@Auto的字段
-  static List<InjectableField> _collectInjectableFields(ClassElement element) {
+  static List<InjectableField> _collectInjectableFields(ClassElement2 element) {
     final fields = <InjectableField>[];
 
-    for (final field in element.fields) {
-      final annotations = field.metadata.annotations;
+    for (final field in element.fields2) {
+      final annotations = field.metadata2.annotations;
 
       for (final annotation in annotations) {
         try {
-          final annotationElement = annotation.element;
-          if (annotationElement?.enclosingElement?.name == 'Auto') {
+          final annotationElement = annotation.element2;
+          if (annotationElement?.enclosingElement2?.name3 == 'Auto') {
             final annotationReader = ConstantReader(
               annotation.computeConstantValue(),
             );
@@ -270,8 +270,8 @@ class ServiceInfo {
 
             fields.add(
               InjectableField(
-                fieldName: field.name ?? 'unknownField',
-                fieldType: field.type.getDisplayString(withNullability: false),
+                fieldName: field.name3 ?? 'unknownField',
+                fieldType: field.type.getDisplayString(),
                 lazy: lazy,
                 serviceName: serviceName,
               ),
