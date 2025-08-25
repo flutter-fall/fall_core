@@ -1,10 +1,17 @@
 # Fall Core
 
-**Fall Core** 是一个受 Java Spring 框架启发的 Flutter AOP 和依赖注入框架，旨在为 Flutter 应用提供企业级的架构支持和开发体验。
+[![Pub Version](https://img.shields.io/pub/v/fall_core)](https://pub.dev/packages/fall_core)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Dart](https://img.shields.io/badge/Dart-3.8.1+-blue.svg)](https://dart.dev/)
+[![Flutter](https://img.shields.io/badge/Flutter-compatible-blue.svg)](https://flutter.dev/)
 
-## 🌟 项目愿景
+**Fall Core** is a Flutter AOP (Aspect-Oriented Programming) and Dependency Injection framework inspired by Java Spring Framework, designed to provide enterprise-level architectural support and development experience for Flutter applications.
 
-Fall Core 致力于成为 Flutter 生态中的 "Spring Framework"，为移动应用开发带来成熟的企业级架构模式和最佳实践。
+## 🌟 Vision
+
+Fall Core aims to become the "Spring Framework" of the Flutter ecosystem, bringing mature enterprise-level architectural patterns and best practices to mobile application development.
+
+[中文文档 | Chinese Documentation](#中文文档)
 
 ## ✨ 核心特性
 
@@ -29,19 +36,23 @@ Fall Core 致力于成为 Flutter 生态中的 "Spring Framework"，为移动应
 
 ## 🚀 快速开始
 
-### 安装
+### Installation
 
-在您的 `pubspec.yaml` 中添加依赖：
+Add the following to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  fall_core:
-    git:
-      url: https://github.com/your-repo/fall-core.git
+  fall_core: ^0.0.1
   get: ^4.7.2
 
 dev_dependencies:
   build_runner: ^2.7.0
+```
+
+Then run:
+
+```bash
+flutter pub get
 ```
 
 ### 基本使用
@@ -258,7 +269,7 @@ class SecureService { }
 
 ```bash
 # 克隆项目
-git clone https://github.com/your-repo/fall-core.git
+git clone https://github.com/flutter-fall/fall_core.git
 cd fall-core
 
 # 安装依赖
@@ -280,7 +291,7 @@ flutter run
 - [API 文档](https://pub.dev/documentation/fall_core)
 - [示例项目](./example)
 - [更新日志](CHANGELOG.md)
-- [问题反馈](https://github.com/your-repo/fall-core/issues)
+- [问题反馈](https://github.com/flutter-fall/fall_core/issues)
 
 ## 🙏 致谢
 

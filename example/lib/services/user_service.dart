@@ -12,7 +12,7 @@ class UserService {
     _logger.i('用户尝试登录', error: {'username': username});
 
     // 模拟登录逻辑
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 100));
 
     if (username == 'admin' && password == 'password') {
       _logger.i('用户登录成功', error: {'username': username});

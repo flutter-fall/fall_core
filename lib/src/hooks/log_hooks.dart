@@ -21,14 +21,8 @@ class LogBeforeHook implements BeforeHook {
   @override
   void execute(HookContext context) {
     try {
-      // 参数验证
-      if (context.target == null) {
-        print('LogBeforeHook: target is null');
-        return;
-      }
-
       if (context.methodName.isEmpty) {
-        print('LogBeforeHook: methodName is empty');
+        _logger.w('LogBeforeHook: methodName is empty');
         return;
       }
 
@@ -36,7 +30,7 @@ class LogBeforeHook implements BeforeHook {
       final methodName = context.methodName;
 
       // 处理参数，对可能的敏感信息进行遮蔽
-      final safeArgs = _maskSensitiveArgs(methodName, context.arguments ?? []);
+      final safeArgs = _maskSensitiveArgs(methodName, context.arguments);
 
       _logger.i(
         '[$className.$methodName] 方法调用开始',
@@ -44,17 +38,17 @@ class LogBeforeHook implements BeforeHook {
           'className': className,
           'methodName': methodName,
           'arguments': safeArgs,
-          'argumentTypes': (context.argumentTypes ?? [])
+          'argumentTypes': context.argumentTypes
               .map((t) => t.toString())
               .toList(),
-          'returnType': context.returnType?.toString() ?? 'unknown',
+          'returnType': context.returnType.toString(),
           'allowedHooks': context.allowedHooks ?? [],
           'timestamp': DateTime.now().toIso8601String(),
         },
       );
     } catch (e) {
       // 防止LogHook异常影响主流程
-      print('LogBeforeHook执行异常: $e');
+      _logger.e('LogBeforeHook执行异常: $e');
     }
   }
 
@@ -104,7 +98,7 @@ class TimingAroundHook implements AroundHook {
 
     try {
       // 参数验证
-      if (context.target == null || context.methodName.isEmpty) {
+      if (context.methodName.isEmpty) {
         return proceed();
       }
 
@@ -130,7 +124,7 @@ class TimingAroundHook implements AroundHook {
 
         return result;
       } catch (e) {
-        stopwatch?.stop();
+        stopwatch.stop();
 
         // 记录执行失败的时间
         _logger.e(
@@ -139,7 +133,7 @@ class TimingAroundHook implements AroundHook {
             'exception': e,
             'className': className,
             'methodName': methodName,
-            'duration': '${stopwatch?.elapsedMilliseconds ?? 0}ms',
+            'duration': '${stopwatch.elapsedMilliseconds}ms',
             'success': false,
             'timestamp': DateTime.now().toIso8601String(),
           },
@@ -150,7 +144,7 @@ class TimingAroundHook implements AroundHook {
     } catch (e) {
       // TimingHook本身异常时的处理
       stopwatch?.stop();
-      print('TimingAroundHook执行异常: $e');
+      _logger.e('TimingAroundHook执行异常: $e');
       // 异常时仍然执行原方法
       return proceed();
     }
@@ -173,8 +167,8 @@ class LogAfterHook implements AfterHook {
   void execute(HookContext context) {
     try {
       // 参数验证
-      if (context.target == null || context.methodName.isEmpty) {
-        print('LogAfterHook: invalid context');
+      if (context.methodName.isEmpty) {
+        _logger.w('LogAfterHook: invalid context');
         return;
       }
 
@@ -195,13 +189,13 @@ class LogAfterHook implements AfterHook {
           'result': safeResult,
           'resultType': resultInfo['type'],
           'isAsync': resultInfo['isAsync'],
-          'returnType': context.returnType?.toString() ?? 'unknown',
+          'returnType': context.returnType.toString(),
           'timestamp': DateTime.now().toIso8601String(),
         },
       );
     } catch (e) {
       // 防止LogHook异常影响主流程
-      print('LogAfterHook执行异常: $e');
+      _logger.e('LogAfterHook执行异常: $e');
     }
   }
 
@@ -293,8 +287,8 @@ class LogThrowHook implements ThrowHook {
   void execute(HookContext context) {
     try {
       // 参数验证
-      if (context.target == null || context.methodName.isEmpty) {
-        print('LogThrowHook: invalid context');
+      if (context.methodName.isEmpty) {
+        _logger.w('LogThrowHook: invalid context');
         return;
       }
 
@@ -311,17 +305,17 @@ class LogThrowHook implements ThrowHook {
           'methodName': methodName,
           'exceptionType': exception?.runtimeType.toString() ?? 'unknown',
           'exceptionMessage': _getSafeExceptionMessage(exception),
-          'arguments': _maskSensitiveArgs(methodName, context.arguments ?? []),
-          'argumentTypes': (context.argumentTypes ?? [])
+          'arguments': _maskSensitiveArgs(methodName, context.arguments),
+          'argumentTypes': (context.argumentTypes)
               .map((t) => t.toString())
               .toList(),
-          'returnType': context.returnType?.toString() ?? 'unknown',
+          'returnType': context.returnType.toString(),
           'timestamp': DateTime.now().toIso8601String(),
         },
       );
     } catch (e) {
       // 防止ThrowHook异常导致循环异常
-      print('LogThrowHook执行异常(已防止循环): $e');
+      _logger.e('LogThrowHook执行异常(已防止循环): $e');
     }
   }
 

@@ -17,10 +17,12 @@ class TestService {
   void testMethod() {
     _logger.i('TestService.testMethod called');
 
-    if (userService != null) {
+    try {
+      // 尝试访问 userService，如果没有正确注入会抛出异常
+      userService.toString();
       _logger.i('UserService 注入成功');
-    } else {
-      _logger.e('UserService 注入失败');
+    } catch (e) {
+      _logger.e('UserService 注入失败: $e');
     }
 
     if (nonExistentService != null) {
