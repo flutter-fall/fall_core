@@ -16,7 +16,8 @@ Fall Core aims to become the "Spring Framework" of the Flutter ecosystem, bringi
 ## ✨ 核心特性
 
 ### 🎯 依赖注入 (Dependency Injection)
-- **自动服务发现**: 通过 `@Service` 注解自动注册服务
+- **服务注解**: 通过 `@Service` 注解标记服务类
+- **自动注入**: 通过 `@Auto` 注解实现属性注入
 - **命名注入**: 支持通过名称区分同类型的多个服务实例
 - **生命周期管理**: 支持单例和原型模式
 - **懒加载**: 按需创建服务实例，优化应用启动性能
@@ -28,11 +29,11 @@ Fall Core aims to become the "Spring Framework" of the Flutter ecosystem, bringi
 - **Throw Hook**: 异常处理和统一错误管理
 - **Hook 过滤**: 支持按名称过滤特定的 Hook
 
-### 📝 自动代码生成
-- **服务自动扫描**: 扫描 `@Service` 注解并生成注册代码
-- **AOP 代理生成**: 为 `@Aop` 标注的类生成增强代理类
-- **依赖注入代码**: 自动生成依赖注入的样板代码
-- **类型安全**: 编译时检查，避免运行时错误
+### 📝 企业级架构
+- **注解驱动**: 类似 Spring 的注解系统
+- **异常处理**: 完整的异常拦截和处理机制
+- **日志系统**: 内置的日志系统和 Hook 集成
+- **性能优化**: 基于 GetX 的高性能依赖注入
 
 ## 🚀 快速开始
 
@@ -42,11 +43,8 @@ Add the following to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  fall_core: ^0.0.1
+  fall_core: ^0.0.2
   get: ^4.7.2
-
-dev_dependencies:
-  build_runner: ^2.7.0
 ```
 
 Then run:
@@ -153,30 +151,22 @@ class TimingHook implements AroundHook {
 
 ```dart
 void main() {
-  // 初始化服务容器
-  AutoScan.registerServices();
-  
+  // 手动注册服务到GetX
+  Get.lazyPut<AopService>(() => AopService());
+
   // 注册 AOP Hooks
   final aopService = Get.find<AopService>();
   aopService.addBeforeHook(LoggingHook());
   aopService.addAroundHook(TimingHook());
-  
-  // 执行依赖注入
-  AutoScan.injectServices();
+
+  //结合fall_gen自动生成Aop代码
+  //结合fall_gen自动生成auto_scan代码，详见fall_gen说明
   
   runApp(MyApp());
 }
 ```
 
-#### 5. 代码生成
 
-```bash
-# 运行代码生成
-dart run build_runner build
-
-# 监视模式（开发推荐）
-dart run build_runner watch
-```
 
 ## 📚 核心概念
 
@@ -211,8 +201,7 @@ AroundHook.before → BeforeHook → 目标方法 → AfterHook → AroundHook.a
 | 依赖注入 | @Autowired, @Component | @Auto, @Service |
 | AOP | @Aspect, @Around | @Aop, AroundHook |
 | 配置 | application.yml | pubspec.yaml |
-| 代码生成 | 反射 + 代理 | build_runner |
-| 容器 | ApplicationContext | GetX + AutoScan |
+| 容器 | ApplicationContext | GetX |
 
 ## 📖 示例项目
 
@@ -225,22 +214,6 @@ AroundHook.before → BeforeHook → 目标方法 → AfterHook → AroundHook.a
 - 完整的 Flutter 应用示例
 
 ## 🔧 配置
-
-### build.yaml 配置
-
-```yaml
-targets:
-  $default:
-    builders:
-      fall_core|aop_generator:
-        enabled: true
-        generate_for:
-          - lib/**
-      fall_core|service_generator:
-        enabled: true
-        generate_for:
-          - lib/**
-```
 
 ### 自定义配置
 
@@ -278,7 +251,6 @@ flutter pub get
 # 运行示例
 cd example
 flutter pub get
-dart run build_runner build
 flutter run
 ```
 

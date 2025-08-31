@@ -43,7 +43,7 @@
 //
 // // 2. 注册服务和Hook
 // void main() {
-//   // 手动注册（未来会由代码生成器自动完成）
+//   // 手动注册服务
 //   Get.lazyPut<AopService>(() => AopService());
 //   Get.lazyPut<UserService>(() => UserService());
 //
@@ -65,8 +65,7 @@
 // - ✅ Hook名称过滤
 // - ✅ 异常处理和日志记录
 // - ✅ 懒加载依赖注入
-// - ✅ 完整的示例代码
-// - ⚠️ 代码生成器（需要修复analyzer API问题）
+// - ✅ GetX集成的依赖注入工具
 
 // 核心注解
 export 'src/annotations/annotations.dart';
@@ -79,6 +78,3 @@ export 'src/services/services.dart';
 
 // 工具类
 export 'src/utils/utils.dart';
-
-// 代码生成器（暂时有问题）
-// export 'src/generators/generators.dart';

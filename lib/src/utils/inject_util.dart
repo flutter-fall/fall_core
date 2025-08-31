@@ -181,7 +181,7 @@ class InjectUtil {
           serviceName != null
               ? '请确认服务名称 "$serviceName" 是否正确'
               : '请确认是否使用了正确的注册方式',
-          '检查 AutoScan.registerServices() 是否已执行',
+          '请手动注册服务到GetX容器',
         ];
       case '类型不匹配':
         return ['请检查注册的服务类型与所需类型是否一致', '确认 ${T.toString()} 的类型定义正确'];
