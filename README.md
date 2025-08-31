@@ -43,7 +43,7 @@ Add the following to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  fall_core: ^0.0.2
+  fall_core: ^0.0.4
   get: ^4.7.2
 ```
 

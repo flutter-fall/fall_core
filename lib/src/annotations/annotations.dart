@@ -5,8 +5,10 @@
 // - [@Service] 标记需要自动注册的服务类
 // - [@Auto] 标记需要自动注入的属性
 // - [@NoAop] 标记不需要AOP增强的方法
+// - [@AutoScan] 配置代码生成器的扫描范围
 
 export 'aop.dart';
 export 'service.dart';
 export 'auto.dart';
 export 'no_aop.dart';
+export 'auto_scan.dart';

@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.4] - 2025-08-31
+
+### Added
+- **AutoScan注解**: 新增AutoScan配置注解，用于配置代码生成器扫描范围
+- **Fall_gen集成**: 支持与fall_gen项目的配置协作
+### Fixed
+- 重新添加回来，引用不是错误
+
+## [0.0.3] - 2025-08-31
+
+### Fixed
+- 移除flutter sdk:flutter的依赖
+
 ## [0.0.2] - 2025-08-31
 
 ### Changed
