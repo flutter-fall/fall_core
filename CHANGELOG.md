@@ -5,6 +5,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.5] - 2025-08-31
+
+### Removed
+- **GetX依赖**: 完全移除GetX依赖，实现真正的轻量级核心框架
+- **InjectUtil工具类**: 将InjectUtil移动到fall_gen项目中，进一步分离关注点
+- **外部依赖**: 移除get包依赖，减少包大小和复杂性
+
+### Changed
+- **核心架构**: 从基于GetX的依赖注入转为纯注解定义模式
+- **服务管理**: 简化为直接实例化模式，更加直观
+- **文档更新**: 更新所有示例代码和文档，移除GetX相关内容
+
+### Improved
+- **包大小**: 显著减小包大小，提高安装和构建速度
+- **简洁性**: 无外部依赖，更纯粹的核心框架
+- **学习成本**: 减少学习成本，不需要学习GetX相关概念
+- **灵活性**: 用户可以选择任意的依赖注入框架或自己管理服务
+
+### Technical Details
+- **零依赖**: 除Flutter SDK外无任何第三方依赖
+- **更小包体积**: 从23KB减少到约15KB左右
+- **更快构建**: 减少依赖解析时间
+
+### Migration Guide
+如果您从 0.0.4 升级到 0.0.5：
+
+1. **移除GetX依赖**: 从pubspec.yaml中移除`get`依赖
+2. **更新服务创建**: 用直接实例化替换`Get.lazyPut`和`Get.find`
+3. **使用fall_gen**: 如需自动依赖注入，请使用fall_gen项目
+4. **更新导入**: 不再需要导入GetX相关包
+
 ## [0.0.4] - 2025-08-31
 
 ### Added

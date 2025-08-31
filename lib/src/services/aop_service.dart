@@ -9,7 +9,7 @@ import '../utils/logger_factory.dart';
 ///
 /// 使用示例：
 /// ```dart
-/// final aopService = Get.find<AopService>();
+/// final aopService = AopService();
 /// aopService.addBeforeHook(LoggingBeforeHook());
 /// aopService.addAfterHook(LoggingAfterHook());
 /// ```

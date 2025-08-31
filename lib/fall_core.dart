@@ -1,7 +1,7 @@
 // Fall Core - Flutter AOP and Dependency Injection Framework
 //
 // Fall Core 是一个 Flutter 框架，提供了完整的 AOP（面向切面编程）和依赖注入解决方案，
-// 灵感来自于 Spring 框架，基于 GetX 进行了进一步封装。
+// 灵感来自于 Spring 框架。
 //
 // ## 主要功能
 //
@@ -41,14 +41,13 @@
 //   }
 // }
 //
-// // 2. 注册服务和Hook
+// // 2. 初始化和使用
 // void main() {
-//   // 手动注册服务
-//   Get.lazyPut<AopService>(() => AopService());
-//   Get.lazyPut<UserService>(() => UserService());
+//   // 创建服务实例
+//   final aopService = AopService();
+//   final userService = UserService();
 //
 //   // 注册Hook
-//   final aopService = Get.find<AopService>();
 //   aopService.addBeforeHook(LogBeforeHook());
 //   aopService.addAroundHook(TimingAroundHook());
 //
@@ -65,7 +64,7 @@
 // - ✅ Hook名称过滤
 // - ✅ 异常处理和日志记录
 // - ✅ 懒加载依赖注入
-// - ✅ GetX集成的依赖注入工具
+// - ✅ 轻量级核心框架
 
 // 核心注解
 export 'src/annotations/annotations.dart';

@@ -33,7 +33,7 @@ Fall Core aims to become the "Spring Framework" of the Flutter ecosystem, bringi
 - **注解驱动**: 类似 Spring 的注解系统
 - **异常处理**: 完整的异常拦截和处理机制
 - **日志系统**: 内置的日志系统和 Hook 集成
-- **性能优化**: 基于 GetX 的高性能依赖注入
+- **轻量级框架**: 简洁的核心实现，无外部依赖
 
 ## 🚀 快速开始
 
@@ -43,8 +43,7 @@ Add the following to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  fall_core: ^0.0.4
-  get: ^4.7.2
+  fall_core: ^0.0.5
 ```
 
 Then run:
@@ -151,11 +150,10 @@ class TimingHook implements AroundHook {
 
 ```dart
 void main() {
-  // 手动注册服务到GetX
-  Get.lazyPut<AopService>(() => AopService());
+  // 创建服务实例
+  final aopService = AopService();
 
   // 注册 AOP Hooks
-  final aopService = Get.find<AopService>();
   aopService.addBeforeHook(LoggingHook());
   aopService.addAroundHook(TimingHook());
 
@@ -201,7 +199,7 @@ AroundHook.before → BeforeHook → 目标方法 → AfterHook → AroundHook.a
 | 依赖注入 | @Autowired, @Component | @Auto, @Service |
 | AOP | @Aspect, @Around | @Aop, AroundHook |
 | 配置 | application.yml | pubspec.yaml |
-| 容器 | ApplicationContext | GetX |
+| 容器 | ApplicationContext | 轻量级核心 |
 
 ## 📖 示例项目
 
@@ -270,7 +268,6 @@ flutter run
 特别感谢以下项目的启发：
 
 - [Spring Framework](https://spring.io/) - Java 企业级应用框架
-- [GetX](https://github.com/jonataslaw/getx) - Flutter 状态管理和依赖注入
 - [Injectable](https://github.com/Milad-Akarie/injectable) - Dart 依赖注入代码生成
 
 ---

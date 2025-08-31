@@ -1,6 +1,6 @@
 name: fall_core
 description: "Fall Core - A Flutter AOP and Dependency Injection framework inspired by Spring, providing enterprise-level DI and AOP capabilities."
-version: 0.0.4
+version: 0.0.5
 homepage: https://github.com/flutter-fall/fall_core
 repository: https://github.com/flutter-fall/fall_core
 issue_tracker: https://github.com/flutter-fall/fall_core/issues
@@ -20,8 +20,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  # GetX for state management and dependency injection
-  get: ^4.7.2
+
   logger: ^2.6.1
   meta: ^1.15.0
   path: ^1.9.1
