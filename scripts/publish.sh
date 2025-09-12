@@ -2,6 +2,10 @@
 
 # Fall Core 多模块发布脚本
 # 自动化发布 fall_core_base、fall_core_gen、fall_core_main 到 pub.dev
+# 参数说明:
+#   1 - 仅发布 fall_core_base
+#   2 - 发布 fall_core_gen 和 fall_core_main
+#   无参数 - 发布所有模块
 
 set -e  # 遇到错误时停止执行
 
@@ -10,8 +14,34 @@ echo "================================"
 echo
 
 # 定义模块列表
-MODULES=("fall_core_base" "fall_core_gen" "fall_core_main")
+ALL_MODULES=("fall_core_base" "fall_core_gen" "fall_core_main")
 ROOT_DIR=$(pwd)
+
+# 根据参数确定要发布的模块
+if [ "$1" = "help" ] || [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+    echo "使用说明:"
+    echo "  ./publish.sh      - 发布所有模块"
+    echo "  ./publish.sh 1    - 仅发布 fall_core_base"
+    echo "  ./publish.sh 2    - 发布 fall_core_gen 和 fall_core_main"
+    echo "  ./publish.sh help - 显示此帮助信息"
+    echo
+    exit 0
+fi
+
+if [ "$1" = "1" ]; then
+    MODULES=("fall_core_base")
+    PUBLISH_ORDER=("fall_core_base")
+    echo "[信息] 模式: 仅发布 fall_core_base"
+elif [ "$1" = "2" ]; then
+    MODULES=("fall_core_gen" "fall_core_main")
+    PUBLISH_ORDER=("fall_core_gen" "fall_core_main")
+    echo "[信息] 模式: 发布 fall_core_gen 和 fall_core_main"
+else
+    MODULES=("fall_core_base" "fall_core_gen" "fall_core_main")
+    PUBLISH_ORDER=("fall_core_base" "fall_core_gen" "fall_core_main")
+    echo "[信息] 模式: 发布所有模块"
+fi
+echo
 
 # 颜色定义
 RED='\033[0;31m'
@@ -38,10 +68,12 @@ print_error() {
 }
 
 # 检查当前是否在项目根目录
-if [ ! -d "fall_core_base" ] || [ ! -d "fall_core_gen" ] || [ ! -d "fall_core_main" ]; then
-    print_error "请在项目根目录执行此脚本"
-    exit 1
-fi
+for module in "${MODULES[@]}"; do
+    if [ ! -d "$module" ]; then
+        print_error "请在项目根目录执行此脚本，缺少目录: $module"
+        exit 1
+    fi
+done
 
 # 检查是否有未提交的更改
 if [ -n "$(git status --porcelain)" ]; then
@@ -190,8 +222,7 @@ fi
 print_step "阶段 3/3: 执行发布"
 echo "=================="
 
-# 按依赖顺序发布模块
-PUBLISH_ORDER=("fall_core_base" "fall_core_gen" "fall_core_main")
+# 按依赖顺序发布模块（已在参数处理中设置）
 
 for module in "${PUBLISH_ORDER[@]}"; do
     publish_module "$module" || exit 1

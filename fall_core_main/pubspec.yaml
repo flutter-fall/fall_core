@@ -23,8 +23,9 @@ dependencies:
   flutter:
     sdk: flutter
   # 核心注解和工具类
-  fall_core_base:
-    path: ../fall_core_base
+  fall_core_base: ^0.0.1
+  # fall_core_base:
+    # path: ../fall_core_base
   # 依赖注入容器
   get: ^4.7.2
   # 日志支持

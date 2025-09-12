@@ -2,6 +2,10 @@
 chcp 65001 >nul
 REM Fall Core 多模块发布脚本 (Windows 版本)
 REM 自动化发布 fall_core_base、fall_core_gen、fall_core_main 到 pub.dev
+REM 参数说明:
+REM   1 - 仅发布 fall_core_base
+REM   2 - 发布 fall_core_gen 和 fall_core_main
+REM   无参数 - 发布所有模块
 
 setlocal enabledelayedexpansion
 
@@ -12,27 +16,44 @@ echo ===========================================
 echo.
 
 REM 定义模块列表
-set MODULES=fall_core_base fall_core_gen fall_core_main
+set ALL_MODULES=fall_core_base fall_core_gen fall_core_main
 set ROOT_DIR=%CD%
 
+REM 根据参数确定要发布的模块
+if "%1"=="help" (
+    echo 使用说明:
+    echo   publish.bat      - 发布所有模块
+    echo   publish.bat 1    - 仅发布 fall_core_base
+    echo   publish.bat 2    - 发布 fall_core_gen 和 fall_core_main
+    echo   publish.bat help - 显示此帮助信息
+    echo.
+    pause
+    exit /b 0
+)
+
+if "%1"=="1" (
+    set MODULES=fall_core_base
+    set PUBLISH_ORDER=fall_core_base
+    echo [信息] 模式: 仅发布 fall_core_base
+) else if "%1"=="2" (
+    set MODULES=fall_core_gen fall_core_main
+    set PUBLISH_ORDER=fall_core_gen fall_core_main
+    echo [信息] 模式: 发布 fall_core_gen 和 fall_core_main
+) else (
+    set MODULES=fall_core_base fall_core_gen fall_core_main
+    set PUBLISH_ORDER=fall_core_base fall_core_gen fall_core_main
+    echo [信息] 模式: 发布所有模块
+)
+echo.
+
 REM 检查当前是否在项目根目录
-if not exist "fall_core_base" (
-    echo [错误] 请在项目根目录执行此脚本
-    echo.
-    pause
-    exit /b 1
-)
-if not exist "fall_core_gen" (
-    echo [错误] 请在项目根目录执行此脚本
-    echo.
-    pause
-    exit /b 1
-)
-if not exist "fall_core_main" (
-    echo [错误] 请在项目根目录执行此脚本
-    echo.
-    pause
-    exit /b 1
+for %%m in (%MODULES%) do (
+    if not exist "%%m" (
+        echo [错误] 请在项目根目录执行此脚本，缺少目录: %%m
+        echo.
+        pause
+        exit /b 1
+    )
 )
 
 REM 检查是否有未提交的更改
@@ -156,8 +177,7 @@ echo.
 echo [步骤 3/3] 执行发布
 echo ==================
 
-REM 按依赖顺序发布模块
-set PUBLISH_ORDER=fall_core_base fall_core_gen fall_core_main
+REM 按依赖顺序发布模块（已在参数处理中设置）
 
 for %%m in (%PUBLISH_ORDER%) do (
     echo [发布] 模块: %%m

@@ -22,9 +22,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  # 核心注解和工具类
-  fall_core_base:
-    path: ../fall_core_base
+  fall_core_base: ^0.0.1
+  # fall_core_base:
+    # path: ../fall_core_base
   # 代码生成相关依赖
   build: ^3.0.2
   source_gen: ^3.1.0
