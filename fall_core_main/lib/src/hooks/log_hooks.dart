@@ -4,7 +4,7 @@ import 'before_hook.dart';
 import 'after_hook.dart';
 import 'throw_hook.dart';
 import 'around_hook.dart';
-import '../utils/logger_factory.dart';
+import 'package:fall_core_base/fall_core_base.dart';
 
 /// 标准的日志记录BeforeHook
 ///

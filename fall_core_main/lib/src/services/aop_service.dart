@@ -1,7 +1,6 @@
 import 'package:logger/logger.dart';
-import '../annotations/annotations.dart';
 import '../hooks/hooks.dart';
-import '../utils/logger_factory.dart';
+import 'package:fall_core_base/fall_core_base.dart';
 
 /// AOP服务，管理和执行Hook逻辑
 ///

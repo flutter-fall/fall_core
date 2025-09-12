@@ -1,0 +1,26 @@
+targets:
+  $default:
+    builders:
+      fall_gen|aop_generator:
+        enabled: true
+        generate_for:
+          - lib/src/services/**
+      fall_gen|service_generator:
+        enabled: true
+        generate_for:
+          - lib/src/services/**
+
+builders:
+  aop_generator:
+    import: "package:fall_gen/src/generators/builders.dart"
+    builder_factories: ["aopGenerator"]
+    build_extensions: {".dart": [".g.dart"]}
+    auto_apply: dependents
+    build_to: source
+    
+  service_generator:
+    import: "package:fall_gen/src/generators/builders.dart"
+    builder_factories: ["serviceGenerator"]
+    build_extensions: {".dart": [".g.dart"]}
+    auto_apply: dependents
+    build_to: source

@@ -1,17 +1,63 @@
 # Fall Core
 
-[![Pub Version](https://img.shields.io/pub/v/fall_core)](https://pub.dev/packages/fall_core)
+一个受 Spring 框架启发的 Flutter 企业级开发框架，提供依赖注入（DI）和面向切面编程（AOP）功能。
+
+[![Pub Version](https://img.shields.io/pub/v/fall_core_base)](https://pub.dev/packages/fall_core_base)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Dart](https://img.shields.io/badge/Dart-3.8.1+-blue.svg)](https://dart.dev/)
-[![Flutter](https://img.shields.io/badge/Flutter-compatible-blue.svg)](https://flutter.dev/)
+[![Flutter](https://img.shields.io/badge/Flutter-3.0%2B-blue)](https://flutter.dev)
 
-**Fall Core** is a Flutter AOP (Aspect-Oriented Programming) and Dependency Injection framework inspired by Java Spring Framework, designed to provide enterprise-level architectural support and development experience for Flutter applications.
+## ✨ 特性
 
-## 🌟 Vision
+- 🏗️ **企业级架构**：受 Spring 框架启发的设计理念
+- 💉 **依赖注入**：基于注解的自动依赖注入系统
+- 🔄 **面向切面编程**：完整的 AOP 支持，包括 Before、After、Around、Throw Hook
+- ⚡ **零运行时开销**：编译时代码生成，无反射调用
+- 🎯 **类型安全**：完全类型安全的依赖注入
+- 🔧 **模块化设计**：清晰的模块分离和职责划分
+- 📦 **轻量级**：核心模块零外部依赖
 
-Fall Core aims to become the "Spring Framework" of the Flutter ecosystem, bringing mature enterprise-level architectural patterns and best practices to mobile application development.
+## 🏛️ 模块架构
 
-[中文文档 | Chinese Documentation](#中文文档)
+Fall Core 采用模块化架构设计，分为三个独立的包：
+
+```mermaid
+graph TB
+    subgraph "Fall Core 框架"
+        Base["fall_core_base<br/>📦 核心注解 & 工具"]
+        Gen["fall_core_gen<br/>🛠️ 代码生成器"]
+        Main["fall_core_main<br/>🚀 运行时核心"]
+    end
+    
+    subgraph "用户项目"
+        App["📱 Flutter App"]
+    end
+    
+    Base --> Gen
+    Base --> Main
+    Gen --> App
+    Main --> App
+```
+
+### 📦 [fall_core_base](./fall_core_base/)
+**核心注解和基础工具模块**
+- 提供 `@Service`、`@Auto`、`@Aop`、`@NoAop` 等核心注解
+- 基础工具类和日志工厂
+- 零外部依赖，轻量级设计
+
+### 🛠️ [fall_core_gen](./fall_core_gen/)
+**代码生成器模块**
+- `ServiceGenerator`：服务注册代码生成
+- `AopGenerator`：AOP 代理类生成
+- 编译时扫描和代码生成
+- 支持 `build_runner` 集成
+
+### 🚀 [fall_core_main](./fall_core_main/)
+**运行时核心模块**
+- AOP 执行引擎和 Hook 系统
+- 依赖注入工具
+- GetX 容器集成
+- 企业级运行时功能
 
 ## ✨ 核心特性
 
@@ -37,19 +83,29 @@ Fall Core aims to become the "Spring Framework" of the Flutter ecosystem, bringi
 
 ## 🚀 快速开始
 
-### Installation
+### 安装
 
-Add the following to your `pubspec.yaml`:
+在你的 `pubspec.yaml` 中添加以下依赖：
 
 ```yaml
 dependencies:
-  fall_core: ^0.0.5
+  # 核心注解和工具
+  fall_core_base: ^0.0.1
+  # 运行时功能
+  fall_core_main: ^0.0.1
+
+dev_dependencies:
+  # 代码生成器
+  fall_core_gen: ^0.0.1
+  build_runner: ^2.7.0
 ```
 
-Then run:
+然后运行：
 
 ```bash
 flutter pub get
+# 生成代码
+flutter pub run build_runner build
 ```
 
 ### 基本使用

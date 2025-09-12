@@ -1,0 +1,46 @@
+name: fall_core_gen
+description: "Fall Core Code Generator - Code generation tools for Fall Core framework. Provides ServiceGenerator and AopGenerator for compile-time code generation."
+version: 0.0.1
+homepage: https://github.com/flutter-fall/fall_core
+repository: https://github.com/flutter-fall/fall_core
+issue_tracker: https://github.com/flutter-fall/fall_core/issues
+
+# Topics help users discover your package on pub.dev
+topics:
+  - code-generation
+  - build-runner
+  - aop
+  - dependency-injection
+  - source-gen
+
+environment:
+  sdk: '>=3.8.1 <4.0.0'
+  flutter: '>=3.0.0'
+
+# Dependencies specify other packages that your package needs in order to work.
+# 代码生成器模块依赖
+dependencies:
+  flutter:
+    sdk: flutter
+  # 核心注解和工具类
+  fall_core_base:
+    path: ../fall_core_base
+  # 代码生成相关依赖
+  build: ^3.0.2
+  source_gen: ^3.1.0
+  code_builder: ^4.10.1
+  analyzer: ^7.5.5
+  # 工具类依赖
+  glob: ^2.1.0
+  path: ^1.9.1
+  logger: ^2.6.1
+  
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  test: ^1.25.0
+  flutter_lints: ^5.0.0
+  build_runner: ^2.7.0
+
+
