@@ -24,7 +24,8 @@ dependencies:
     sdk: flutter
   # 元数据注解支持
   meta: ^1.15.0
-  
+  # 日志支持
+  logger: ^2.6.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
