@@ -1,0 +1,27 @@
+# Dart/Flutter 相关文件
+.dart_tool/
+.packages
+pubspec.lock
+
+# 构建输出
+build/
+*.generated.dart
+*.g.dart
+
+# IDE 相关文件
+.vscode/
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 日志文件
+*.log
+
+# 临时文件
+*.tmp
+*.temp
