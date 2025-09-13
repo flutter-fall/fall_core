@@ -60,7 +60,7 @@ class AopGenerator extends GeneratorForAnnotation<Aop> {
     String enhancedClassName,
     List<String>? allowedHooks,
   ) {
-    final className = originalClass.name3 ?? 'UnknownClass';
+    final className = originalClass.name ?? 'UnknownClass';
 
     return Class(
       (b) => b
