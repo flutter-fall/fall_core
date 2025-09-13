@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:analyzer/dart/element/element2.dart';
+import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
 import 'package:code_builder/code_builder.dart';
 import '../utils/gen_util.dart';
@@ -13,16 +13,16 @@ import 'package:fall_core_base/fall_core_base.dart';
 class AopGenerator extends GeneratorForAnnotation<Aop> {
   @override
   FutureOr<String> generateForAnnotatedElement(
-    Element2 element,
+    Element element,
     ConstantReader annotation,
     BuildStep buildStep,
   ) {
     // 只处理类
-    if (element is! ClassElement2) {
+    if (element is! ClassElement) {
       throw InvalidGenerationSourceError('@Aop注解只能用于类', element: element);
     }
 
-    final className = element.name3 ?? 'UnknownClass';
+    final className = element.name ?? 'UnknownClass';
     final enhancedClassName = '${className}Aop';
 
     final allowedHooks = annotation.read('allowedHooks').isNull
@@ -56,7 +56,7 @@ class AopGenerator extends GeneratorForAnnotation<Aop> {
 
   /// 生成增强类
   Class _generateClass(
-    ClassElement2 originalClass,
+    ClassElement originalClass,
     String enhancedClassName,
     List<String>? allowedHooks,
   ) {
@@ -72,18 +72,18 @@ class AopGenerator extends GeneratorForAnnotation<Aop> {
   }
 
   /// 生成构造函数列表
-  List<Constructor> _generateConstructors(ClassElement2 originalClass) {
+  List<Constructor> _generateConstructors(ClassElement originalClass) {
     final constructors = <Constructor>[];
 
-    for (final constructor in originalClass.constructors2) {
+    for (final constructor in originalClass.constructors) {
       if (constructor.isPrivate) continue;
 
       final isDefault = constructor.isDefaultConstructor;
-      final constructorName = constructor.name3;
+      final constructorName = constructor.name;
 
       // 构建参数列表
       final parameters = constructor.formalParameters.map((p) {
-        final paramName = p.name3 ?? 'param';
+        final paramName = p.name ?? 'param';
         final paramType = p.type.getDisplayString();
 
         return Parameter(
@@ -95,7 +95,7 @@ class AopGenerator extends GeneratorForAnnotation<Aop> {
 
       // 构建super调用的参数
       final superArgs = constructor.formalParameters.map((p) {
-        return refer(p.name3 ?? 'param');
+        return refer(p.name ?? 'param');
       }).toList();
 
       // 创建Constructor对象
@@ -126,12 +126,12 @@ class AopGenerator extends GeneratorForAnnotation<Aop> {
 
   /// 生成增强方法
   List<Method> _generateMethods(
-    ClassElement2 originalClass,
+    ClassElement originalClass,
     List<String>? allowedHooks,
   ) {
     final methods = <Method>[];
 
-    for (final method in originalClass.methods2) {
+    for (final method in originalClass.methods) {
       // 跳过私有方法、静态方法、抽象方法
       if (method.isPrivate || method.isStatic || method.isAbstract) continue;
 
@@ -145,14 +145,14 @@ class AopGenerator extends GeneratorForAnnotation<Aop> {
   }
 
   /// 生成单个方法
-  Method _generateMethod(MethodElement2 method, List<String>? allowedHooks) {
-    final methodName = method.name3 ?? 'unknownMethod';
+  Method _generateMethod(MethodElement method, List<String>? allowedHooks) {
+    final methodName = method.name ?? 'unknownMethod';
     final returnType = method.returnType.getDisplayString();
     final isVoid = returnType == 'void';
 
     // 构建参数列表
     final parameters = method.formalParameters.map((p) {
-      final paramName = p.name3 ?? 'param';
+      final paramName = p.name ?? 'param';
       final paramType = p.type.getDisplayString();
 
       return Parameter(
@@ -164,13 +164,13 @@ class AopGenerator extends GeneratorForAnnotation<Aop> {
 
     // 构建参数名称字符串，用于方法调用
     final paramNamesStr = method.formalParameters
-        .map((p) => p.name3 ?? 'param')
+        .map((p) => p.name ?? 'param')
         .join(', ');
 
     // 构建参数类型数组字符串
     final paramTypesStr = method.formalParameters.isEmpty
         ? '<Type>[]'
-        : '[${method.formalParameters.map((p) => '${p.name3 ?? 'param'}.runtimeType').join(', ')}]';
+        : '[${method.formalParameters.map((p) => '${p.name ?? 'param'}.runtimeType').join(', ')}]';
 
     // 构建允许的Hook列表字符串
     final allowedHooksStr = allowedHooks != null

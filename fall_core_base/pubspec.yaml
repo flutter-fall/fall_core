@@ -1,6 +1,6 @@
 name: fall_core_base
 description: "Fall Core Base - Core annotations and utilities for Fall Core framework. Provides @Service, @Auto, @Aop annotations and basic utilities."
-version: 0.0.2
+version: 0.0.3
 homepage: https://github.com/flutter-fall/fall_core
 repository: https://github.com/flutter-fall/fall_core
 issue_tracker: https://github.com/flutter-fall/fall_core/issues

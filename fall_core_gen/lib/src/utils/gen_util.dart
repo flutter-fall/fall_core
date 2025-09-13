@@ -1,5 +1,5 @@
 import 'package:analyzer/dart/constant/value.dart';
-import 'package:analyzer/dart/element/element2.dart';
+import 'package:analyzer/dart/element/element.dart';
 import 'package:logger/logger.dart';
 import 'package:source_gen/source_gen.dart';
 import 'package:path/path.dart' as p;
@@ -11,11 +11,11 @@ import 'package:fall_core_base/fall_core_base.dart';
 class GenUtil {
   // 框架级日志记录器
   static final Logger _logger = LoggerFactory.getFrameworkLogger();
-  static bool hasAnnotation(Element2 element, Type annotation) {
+  static bool hasAnnotation(Element element, Type annotation) {
     return checker(annotation).hasAnnotationOfExact(element);
   }
 
-  static DartObject? getAnnotation(Element2 element, Type annotation) {
+  static DartObject? getAnnotation(Element element, Type annotation) {
     return checker(annotation).firstAnnotationOfExact(element);
   }
 

@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:analyzer/dart/element/element2.dart';
+import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
 import 'package:code_builder/code_builder.dart';
 import 'package:source_gen/source_gen.dart';
@@ -14,16 +14,16 @@ import '../utils/gen_util.dart';
 class ServiceGenerator extends GeneratorForAnnotation<AutoScan> {
   @override
   FutureOr<String> generateForAnnotatedElement(
-    Element2 element,
+    Element element,
     ConstantReader annotation,
     BuildStep buildStep,
   ) async {
     // 只处理类
-    if (element is! ClassElement2) {
+    if (element is! ClassElement) {
       throw InvalidGenerationSourceError('@AutoScan注解只能用于类', element: element);
     }
 
-    final className = element.name3 ?? 'UnknownClass';
+    final className = element.name ?? 'UnknownClass';
 
     // 读取@AutoScan注解参数
     final includePatterns = _readStringList(annotation, 'include', [
@@ -96,7 +96,7 @@ class ServiceGenerator extends GeneratorForAnnotation<AutoScan> {
             TypeChecker.typeNamed(Service),
           )) {
             final element = annotatedElement.element;
-            if (element is ClassElement2) {
+            if (element is ClassElement) {
               services.add(
                 ServiceInfo.fromElement(
                   element,
@@ -302,7 +302,7 @@ class ServiceInfo {
   });
 
   factory ServiceInfo.fromElement(
-    ClassElement2 element,
+    ClassElement element,
     ConstantReader annotation,
     Uri inputUri,
   ) {
@@ -320,7 +320,7 @@ class ServiceInfo {
     final injectableFields = _collectInjectableFields(element);
 
     return ServiceInfo(
-      className: element.name3 ?? 'UnknownClass',
+      className: element.name ?? 'UnknownClass',
       inputUri: inputUri,
       serviceName: serviceName,
       lazy: lazy,
@@ -331,16 +331,16 @@ class ServiceInfo {
   }
 
   /// 收集标注@Auto的字段
-  static List<InjectableField> _collectInjectableFields(ClassElement2 element) {
+  static List<InjectableField> _collectInjectableFields(ClassElement element) {
     final fields = <InjectableField>[];
 
-    for (final field in element.fields2) {
-      final annotations = field.metadata2.annotations;
+    for (final field in element.fields) {
+      final annotations = field.metadata.annotations;
 
       for (final annotation in annotations) {
         try {
-          final annotationElement = annotation.element2;
-          if (annotationElement?.enclosingElement2?.name3 == 'Auto') {
+          final annotationElement = annotation.element;
+          if (annotationElement?.enclosingElement?.name == 'Auto') {
             final annotationReader = ConstantReader(
               annotation.computeConstantValue(),
             );
@@ -351,7 +351,7 @@ class ServiceInfo {
 
             fields.add(
               InjectableField(
-                fieldName: field.name3 ?? 'unknownField',
+                fieldName: field.name ?? 'unknownField',
                 fieldType: field.type.getDisplayString(),
                 lazy: lazy,
                 serviceName: serviceName,
