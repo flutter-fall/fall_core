@@ -1,6 +1,6 @@
 import 'package:test/test.dart';
 import 'package:analyzer/dart/constant/value.dart';
-import 'package:analyzer/dart/element/element2.dart';
+import 'package:analyzer/dart/element/element.dart';
 import 'package:source_gen/source_gen.dart';
 import 'package:fall_core_gen/src/utils/gen_util.dart';
 import 'package:build/build.dart';
@@ -41,7 +41,7 @@ class TestClassC {
 }
 
 /// Mock implementation of Element2 for testing
-class MockElement extends Element2 {
+class MockElement extends Element {
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
