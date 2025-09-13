@@ -40,7 +40,7 @@ class TestClassC {
   void methodC() {}
 }
 
-/// Mock implementation of Element2 for testing
+/// Mock implementation of Element for testing
 class MockElement extends Element {
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
