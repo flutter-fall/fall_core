@@ -104,11 +104,30 @@ class PublishTool {
       print('   💻 执行: $command ${args.join(' ')}');
     }
 
-    return await Process.run(
-      command,
-      args,
-      workingDirectory: workingDirectory ?? rootDir.path,
-    );
+    try {
+      // Windows 下特殊处理 flutter 和 dart 命令
+      String executableCommand = command;
+      if (Platform.isWindows) {
+        if (command == 'flutter') {
+          executableCommand = 'flutter.bat';
+        } else if (command == 'dart') {
+          executableCommand = 'dart.exe';
+        }
+      }
+
+      return await Process.run(
+        executableCommand,
+        args,
+        workingDirectory: workingDirectory ?? rootDir.path,
+        runInShell: Platform.isWindows, // Windows 下使用 shell
+      );
+    } catch (e) {
+      if (!silent) {
+        print('   ❌ 命令执行失败: $e');
+      }
+      // 返回一个失败的 ProcessResult
+      return ProcessResult(0, 1, '', 'Command execution failed: $e');
+    }
   }
 
   /// 检查Git状态
