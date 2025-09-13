@@ -1,6 +1,6 @@
 name: fall_core_gen
 description: "Fall Core Code Generator - Code generation tools for Fall Core framework. Provides ServiceGenerator and AopGenerator for compile-time code generation."
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/flutter-fall/fall_core
 repository: https://github.com/flutter-fall/fall_core
 issue_tracker: https://github.com/flutter-fall/fall_core/issues
