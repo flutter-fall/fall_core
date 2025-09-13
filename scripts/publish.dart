@@ -105,21 +105,12 @@ class PublishTool {
     }
 
     try {
-      // Windows 下特殊处理 flutter 和 dart 命令
-      String executableCommand = command;
-      if (Platform.isWindows) {
-        if (command == 'flutter') {
-          executableCommand = 'flutter.bat';
-        } else if (command == 'dart') {
-          executableCommand = 'dart.exe';
-        }
-      }
-
+      // 在Windows下使用shell执行，让系统自动找到正确的可执行文件
       return await Process.run(
-        executableCommand,
+        command,
         args,
         workingDirectory: workingDirectory ?? rootDir.path,
-        runInShell: Platform.isWindows, // Windows 下使用 shell
+        runInShell: true, // 使用shell执行，确保能找到PATH中的命令
       );
     } catch (e) {
       if (!silent) {
