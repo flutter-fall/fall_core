@@ -40,8 +40,20 @@ class TestClassC {
   void methodC() {}
 }
 
+/// Mock implementation of Metadata for testing
+class MockMetadata extends Metadata {
+  @override
+  List<ElementAnnotation> get annotations => [];
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
 /// Mock implementation of Element for testing
 class MockElement extends Element {
+  @override
+  Metadata get metadata => MockMetadata();
+
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
