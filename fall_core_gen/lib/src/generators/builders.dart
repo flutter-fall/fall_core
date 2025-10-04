@@ -9,6 +9,6 @@ Builder aopGenerator(BuilderOptions options) {
   return LibraryBuilder(AopGenerator(), generatedExtension: '.g.dart');
 }
 
-Builder serviceGenerator(BuilderOptions options) {
+Builder serviceAutoScan(BuilderOptions options) {
   return SharedPartBuilder([ServiceAutoScan()], 'auto_scan');
 }

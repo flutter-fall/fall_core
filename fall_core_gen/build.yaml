@@ -1,26 +1,27 @@
-targets:
-  $default:
-    builders:
-      fall_gen|aop_generator:
-        enabled: true
-        generate_for:
-          - lib/src/services/**
-      fall_gen|service_generator:
-        enabled: true
-        generate_for:
-          - lib/src/services/**
-
 builders:
   aop_generator:
-    import: "package:fall_gen/src/generators/builders.dart"
+    import: "package:fall_core_gen/src/generators/builders.dart"
     builder_factories: ["aopGenerator"]
     build_extensions: {".dart": [".g.dart"]}
     auto_apply: dependents
     build_to: source
     
-  service_generator:
-    import: "package:fall_gen/src/generators/builders.dart"
-    builder_factories: ["serviceGenerator"]
+  service_autoscan:
+    import: "package:fall_core_gen/src/generators/builders.dart"
+    builder_factories: ["serviceAutoScan"]
     build_extensions: {".dart": [".g.dart"]}
     auto_apply: dependents
     build_to: source
+
+targets:
+  $default:
+    builders:
+      fall_core_gen|aop_generator:
+        enabled: true
+        generate_for:
+          - lib/src/services/**
+      fall_core_gen|service_autoscan:
+        enabled: true
+        generate_for:
+          - lib/src/services/**
+
