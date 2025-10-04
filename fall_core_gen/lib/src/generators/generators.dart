@@ -5,5 +5,5 @@
 // - [ServiceGenerator] 服务自动扫描和注册生成器
 
 export 'aop_generator.dart';
-export 'service_generator.dart';
+export 'service_autoscan.dart';
 export 'builders.dart';

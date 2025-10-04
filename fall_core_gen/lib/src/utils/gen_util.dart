@@ -63,8 +63,40 @@ class GenUtil {
         }
       }
 
-      // 如果是不同package的package URI，直接返回
-      if (importUri.scheme == 'package') {
+      // 如果是asset URI，检查是否为相同package
+      if (importUri.scheme == 'asset' && outputUri.scheme == 'asset') {
+        // 提取package名称
+        final importPackage = importUri.pathSegments.isNotEmpty
+            ? importUri.pathSegments.first
+            : '';
+        final outputPackage = outputUri.pathSegments.isNotEmpty
+            ? outputUri.pathSegments.first
+            : '';
+
+        // 如果是相同package，计算相对路径
+        if (importPackage == outputPackage && importPackage.isNotEmpty) {
+          // 构建相对路径，去掉package名称部分
+          final importPath = importUri.pathSegments.skip(1).join('/');
+          final outputPath = outputUri.pathSegments.skip(1).join('/');
+          final outputDir = p.dirname(outputPath);
+
+          String relativePath = p.relative(importPath, from: outputDir);
+
+          // 确保使用正斜杠作为路径分隔符（Dart导入路径要求）
+          relativePath = relativePath.replaceAll(p.separator, '/');
+
+          // 如果相对路径不以'./'开头，添加'./'
+          if (!relativePath.startsWith('./') &&
+              !relativePath.startsWith('../')) {
+            relativePath = './$relativePath';
+          }
+
+          return relativePath;
+        }
+      }
+
+      // 如果是不同package的package URI或asset URI，直接返回
+      if (importUri.scheme == 'package' || importUri.scheme == 'asset') {
         return importUri.toString();
       }
 

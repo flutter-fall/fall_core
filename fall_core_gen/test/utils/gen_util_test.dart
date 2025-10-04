@@ -350,6 +350,54 @@ void main() {
           expect(result, isNotEmpty);
         }, returnsNormally);
       });
+
+      test('should calculate relative path for asset scheme URIs', () {
+        // Arrange
+        final importUri = Uri.parse(
+          'asset:fall_data_gen/test/entities/user.dart',
+        );
+        final outputUri = Uri.parse(
+          'asset:fall_data_gen/test/dao/user_dao.g.dart',
+        );
+
+        // Act
+        final result = GenUtil.getImportPath(importUri, outputUri);
+
+        // Assert
+        expect(result, equals('../entities/user.dart'));
+      });
+
+      test('should return asset URI as-is for different packages', () {
+        // Arrange
+        final importUri = Uri.parse(
+          'asset:fall_data_gen/test/entities/user.dart',
+        );
+        final outputUri = Uri.parse(
+          'asset:other_package/test/dao/user_dao.g.dart',
+        );
+
+        // Act
+        final result = GenUtil.getImportPath(importUri, outputUri);
+
+        // Assert
+        expect(result, equals('asset:fall_data_gen/test/entities/user.dart'));
+      });
+
+      test('should handle asset scheme with nested directories', () {
+        // Arrange
+        final importUri = Uri.parse(
+          'asset:my_package/lib/src/models/user.dart',
+        );
+        final outputUri = Uri.parse(
+          'asset:my_package/lib/generated/dao/user_dao.g.dart',
+        );
+
+        // Act
+        final result = GenUtil.getImportPath(importUri, outputUri);
+
+        // Assert
+        expect(result, equals('../../src/models/user.dart'));
+      });
     });
 
     group('checker', () {

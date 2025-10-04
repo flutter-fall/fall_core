@@ -24,9 +24,10 @@ class AutoScan {
   /// - 'lib/generated/**' : 排除generated目录下的所有文件
   /// - '**/test/**' : 排除所有test目录
   final List<String> exclude;
-
+  final List<String> annotations;
   const AutoScan({
     this.include = const ['lib/**/*.dart'],
     this.exclude = const ['**/*.g.dart', '**/*.freezed.dart'],
+    this.annotations = const ['Service'],
   });
 }

@@ -11,7 +11,7 @@ import '../utils/gen_util.dart';
 ///
 /// 基于@AutoScan注解的include和exclude配置，扫描所有@Service标注的类，
 /// 生成自动注册和依赖注入逻辑作为被标注类的part文件
-class ServiceGenerator extends GeneratorForAnnotation<AutoScan> {
+class ServiceAutoScan extends GeneratorForAnnotation<AutoScan> {
   @override
   FutureOr<String> generateForAnnotatedElement(
     Element element,
