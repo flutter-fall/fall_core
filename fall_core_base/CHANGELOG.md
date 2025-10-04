@@ -5,6 +5,28 @@ All notable changes to the fall_core_base package will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.4] - 2025-10-04
+
+### Enhanced
+- 🔧 **@AutoScan 注解增强**: 新增 `annotations` 参数，支持指定要扫描的注解类型
+  - 默认扫描 `['Service']` 注解
+  - 支持自定义扫描目标注解，提升代码生成器的灵活性
+  - 与现有 `include`/`exclude` 参数协同工作，实现精准控制
+
+### Improved
+- 📊 **注解系统优化**: 完善自动扫描配置的可配置性
+- 🏗️ **架构改进**: 为代码生成器提供更精确的注解过滤机制
+
+### Compatibility
+- ✅ 完全向后兼容，现有代码无需修改
+- ✅ 新增参数为可选参数，不影响现有使用方式
+- ✅ 与 fall_core_gen 和 fall_core_main 模块协同升级
+
+### Notes
+- 本版本主要面向代码生成器功能增强
+- 建议配合 fall_core_gen 0.0.4+ 使用以获得最佳体验
+- 核心注解功能保持稳定，无破坏性变更
+
 ## [0.0.3] - 2025-09-13
 
 ### Version Sync

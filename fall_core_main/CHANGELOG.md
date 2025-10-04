@@ -5,6 +5,53 @@ All notable changes to the fall_core_main package will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.4] - 2025-10-04
+
+### 🔄 Version Sync
+- **版本同步升级**: 与框架其他模块保持版本一致性
+- **依赖更新**: 升级至 fall_core_base ^0.0.4
+
+### 🔗 Enhanced Integration
+- **模块协同**: 与新的 fall_core_gen 代码生成器架构完美兼容
+  - 支持新的 `ServiceAutoScan` 生成器
+  - 保持与增强的 `@AutoScan` 注解的协同工作
+  - 支持更精确的注解过滤机制
+
+### 🛡️ Stability Improvements
+- **运行时稳定性**: 所有 AOP 和 DI 功能保持稳定运行
+- **向后兼容**: 现有业务代码无需任何修改
+- **性能保持**: Hook 执行效率和内存占用保持优化状态
+
+### 🏗️ Architecture Alignment
+- **模块边界**: 与新的代码生成器架构对齐，保持清晰的模块边界
+- **服务生命周期**: 支持更精确的服务管理和自动扫描
+- **Hook 系统**: 与更新的注解系统协同，提供更精准的 AOP 控制
+
+### 📊 Quality Assurance
+- **无功能变更**: 本版本不包含任何新功能或破坏性变更
+- **稳定性保证**: 所有现有 API 和行为保持不变
+- **性能优化**: 受益于依赖模块的优化，整体性能得到提升
+
+### 🛠️ Technical Details
+- **依赖版本**: 无三方依赖版本变更，仅升级 fall_core_base
+- **编译兼容**: 与新的代码生成器输出完全兼容
+- **运行时检查**: 所有运行时检查和验证机制保持不变
+
+### 🎆 Benefits
+- 🔄 **版本一致性**: 与整个 Fall Core 框架保持同步
+- 🔗 **更好的集成**: 与增强的代码生成器更好协同
+- 🛡️ **稳定可靠**: 零破坏性变更，平滑升级
+
+### 📝 Usage Notes
+- ✅ **平滑升级**: 直接升级包版本即可，无需代码修改
+- ✅ **最佳实践**: 建议与 fall_core_base 0.0.4+ 和 fall_core_gen 0.0.4+ 一同使用
+- ✅ **性能优化**: 全框架升级后可获得更好的整体性能
+
+### Notes
+- 本版本为纯版本同步升级，不包含任何功能变更
+- 所有运行时组件保持稳定，与新的框架架构完美对齐
+- 为 Fall Core 框架的后续版本升级奠定均衡的技术基础
+
 ## [0.0.3] - 2025-09-13
 
 ### Version Sync
