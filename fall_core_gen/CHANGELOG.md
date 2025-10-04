@@ -5,6 +5,19 @@ All notable changes to the fall_core_gen package will be documented in this file
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.5] - 2025-10-04
+
+### 🔧 Bug Fixes
+- **构建路径修复**: 修正 build.yaml 中类路径配置，确保代码生成器正确引用
+  - 修复 `builders.dart` 中的类导入路径
+  - 解决构建时可能出现的路径解析问题
+  - 提升构建稳定性和可靠性
+
+### 📦 Compatibility
+- ✅ 完全向后兼容，无功能性变更
+- ✅ 修复影响新项目集成的路径问题
+- ✅ 改善开发者体验和项目初始化流程
+
 ## [0.0.4] - 2025-10-04
 
 ### 🚀 Major Refactoring
