@@ -22,9 +22,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  fall_core_base: ^0.0.6
-  # fall_core_base:
-    # path: ../fall_core_base
+ # fall_core_base: ^0.0.6
+  fall_core_base:
+    path: ../fall_core_base
   # 代码生成相关依赖
   source_gen: ^4.0.1
   code_builder: ^4.10.1
@@ -41,3 +41,4 @@ dev_dependencies:
   mockito: ^5.5.1
   test: ^1.26.3
   flutter_lints: ^5.0.0
+  get: ^4.7.2

@@ -19,9 +19,9 @@ targets:
       fall_core_gen|aop_generator:
         enabled: true
         generate_for:
-          - lib/src/services/**
+          - test/services/**
       fall_core_gen|service_autoscan:
         enabled: true
         generate_for:
-          - lib/src/init/**
+          - test/init/**
 

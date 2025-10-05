@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
+import 'package:built_collection/src/list.dart';
 import 'package:code_builder/code_builder.dart';
 import 'package:source_gen/source_gen.dart';
 import 'package:glob/glob.dart';
@@ -43,7 +44,7 @@ class ServiceAutoScan extends GeneratorForAnnotation<AutoScan> {
     }
 
     // 生成part文件内容
-    return _generatePartFile(services, className, buildStep.inputId.uri);
+    return _generateFile(services, className, buildStep);
   }
 
   /// 读取注解中的字符串列表参数
@@ -125,18 +126,26 @@ class ServiceAutoScan extends GeneratorForAnnotation<AutoScan> {
   }
 
   /// 生成part文件内容
-  String _generatePartFile(
+  String _generateFile(
     List<ServiceInfo> services,
     String className,
-    Uri sourceUri,
+    BuildStep buildStep,
   ) {
+    final sourceUri = buildStep.inputId.uri;
     // 收集导入
     final imports = <Directive>[];
 
     // 基础导入
     imports.addAll([
       Directive.import('package:get/get.dart'),
-      Directive.import('package:fall_common/fall_common.dart'),
+      Directive.import('package:fall_core_base/fall_core_base.dart'),
+      Directive.import('package:fall_core_main/fall_core_main.dart'),
+      Directive.import(
+        GenUtil.getImportPath(
+          buildStep.inputId.uri,
+          buildStep.inputId.changeExtension(".g.dart").uri,
+        ),
+      ),
     ]);
 
     // 收集服务文件导入
@@ -156,10 +165,10 @@ class ServiceAutoScan extends GeneratorForAnnotation<AutoScan> {
     }
 
     // 生成扩展类，包含注册和注入方法
-    final extensionClass = Extension(
+    final extensionClass = Class(
       (b) => b
-        ..name = '${className}Generated'
-        ..on = refer(className)
+        ..name = '${className}Impl'
+        ..extend = refer(className)
         ..methods.addAll([
           _genRegisterMethod(services),
           if (services.any((s) => s.injectableFields.isNotEmpty))
@@ -170,11 +179,6 @@ class ServiceAutoScan extends GeneratorForAnnotation<AutoScan> {
     // 生成part文件
     final library = Library(
       (b) => b
-        ..comments.addAll([
-          '// GENERATED CODE - DO NOT MODIFY BY HAND',
-          '// part of \'${sourceUri.pathSegments.last}\'',
-          '// 服务自动扫描和注册，由Fall Gen框架自动生成',
-        ])
         ..directives.addAll(imports)
         ..body.add(extensionClass),
     );
@@ -227,9 +231,9 @@ InjectUtil.inject<${field.fieldType}>(
 
   return Method(
     (b) => b
-      ..static = true
+      ..static = false
       ..returns = refer('void')
-      ..name = 'injectServices'
+      ..name = 'inject'
       ..docs.add('/// 为所有服务注入依赖')
       ..body = Code(methodBodyCode),
   );
@@ -273,9 +277,10 @@ Method _genRegisterMethod(List<ServiceInfo> services) {
 
   return Method(
     (b) => b
-      ..static = true
+      ..static = false
+      ..annotations.add(CodeExpression(Code('override\n')))
       ..returns = refer('void')
-      ..name = 'registerServices'
+      ..name = 'register'
       ..docs.add('/// 注册所有标注@Service的类到GetX')
       ..body = Code(methodBodyCode),
   );

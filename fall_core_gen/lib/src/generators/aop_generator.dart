@@ -38,7 +38,8 @@ class AopGenerator extends GeneratorForAnnotation<Aop> {
       (b) => b
         ..directives.addAll([
           Directive.import('package:get/get.dart'),
-          Directive.import('package:fall_core/fall_core.dart'),
+          // Directive.import('package:fall_core_base/fall_core_base.dart'),
+          Directive.import('package:fall_core_main/fall_core_main.dart'),
           Directive.import(
             GenUtil.getImportPath(
               buildStep.inputId.uri,
