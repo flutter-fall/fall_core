@@ -5,6 +5,20 @@ All notable changes to the fall_core_gen package will be documented in this file
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.7] - 2025-10-05
+
+### 🚀 Code Generation Enhancement
+- **代码生成逻辑优化**: 修改代码生成逻辑，统一接口实现
+- **版本管理增强**: 支持dev模式和灵活版本修改机制
+
+### 🔧 Technical Improvements
+- **接口统一**: 代码生成器接口设计更加一致性
+- **构建稳定性**: 提升代码生成的稳定性和可靠性
+
+### ✨ Benefits
+- 🛠️ **更好的维护性**: 统一的接口设计便于代码维护
+- 🚀 **性能优化**: 代码生成效率和质量提升
+
 ## [0.0.6] - 2025-10-05
 
 ### 🚀 Major Refactoring
