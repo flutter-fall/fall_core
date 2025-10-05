@@ -17,9 +17,15 @@ class VersionSyncTool {
     'fall_core_main': ['fall_core_base'],
   };
 
-  late Directory rootDir;
+  static const Map<String, String> pathDependencies = {
+    'fall_core_gen': '../fall_core_base',
+    'fall_core_main': '../fall_core_base',
+  };
 
-  VersionSyncTool() {
+  late Directory rootDir;
+  final bool devMode;
+
+  VersionSyncTool({this.devMode = false}) {
     rootDir = Directory.current;
   }
 
@@ -94,12 +100,19 @@ class VersionSyncTool {
       final backupFile = File('$modulePath/pubspec.yaml.bak');
       backupFile.writeAsStringSync(content);
 
-      // 替换版本号
-      final updatedContent = content.replaceFirst(
-        RegExp(r'^version:\s*.*$', multiLine: true),
-        'version: $newVersion',
-      );
+      // 逐行处理，只更新版本号行
+      final lines = content.split('\n');
+      final updatedLines = <String>[];
 
+      for (String line in lines) {
+        if (line.startsWith('version:')) {
+          updatedLines.add('version: $newVersion');
+        } else {
+          updatedLines.add(line);
+        }
+      }
+
+      final updatedContent = updatedLines.join('\n');
       _writePubspecContent(modulePath, updatedContent);
 
       // 验证更新是否成功
@@ -123,7 +136,11 @@ class VersionSyncTool {
   bool _updateDependencies(String newVersion) {
     bool allSuccess = true;
 
-    print('\n📦 更新模块间依赖关系...');
+    if (devMode) {
+      print('\n📦 切换到开发模式（使用本地路径依赖）...');
+    } else {
+      print('\n📦 更新模块间依赖关系...');
+    }
     print('========================================');
 
     for (String module in modules) {
@@ -133,21 +150,83 @@ class VersionSyncTool {
       try {
         final modulePath = '${rootDir.path}/$module';
         final content = _readPubspecContent(modulePath);
-        String updatedContent = content;
 
-        for (String dep in deps) {
-          // 更新依赖版本，匹配格式: dep_name: ^x.x.x
-          final depRegex = RegExp('($dep):\\s*\\^[0-9.]+', multiLine: true);
+        final lines = content.split('\n');
+        final updatedLines = <String>[];
 
-          if (depRegex.hasMatch(updatedContent)) {
-            updatedContent = updatedContent.replaceAll(
-              depRegex,
-              '$dep: ^$newVersion',
-            );
-            print('  ✅ $module: 已更新 $dep 依赖至 ^$newVersion');
+        String? currentSection; // 'dependencies' 或 'dev_dependencies'
+        bool skipNextLine = false; // 用于跳过路径依赖的第二行
+
+        for (int i = 0; i < lines.length; i++) {
+          final line = lines[i];
+          final trimmedLine = line.trim();
+
+          // 检测当前所在的配置段
+          if (trimmedLine.startsWith('dependencies:')) {
+            currentSection = 'dependencies';
+            updatedLines.add(line);
+            continue;
+          } else if (trimmedLine.startsWith('dev_dependencies:')) {
+            currentSection = 'dev_dependencies';
+            updatedLines.add(line);
+            continue;
+          }
+
+          // 如果需要跳过当前行（路径依赖的第二行）
+          if (skipNextLine) {
+            skipNextLine = false;
+            continue;
+          }
+
+          // 在 dependencies 或 dev_dependencies 段内处理
+          if (currentSection != null) {
+            bool isTargetDep = false;
+            String? targetDepName;
+
+            // 检查是否是目标依赖
+            for (String dep in deps) {
+              if (trimmedLine.startsWith('$dep:') ||
+                  trimmedLine.startsWith('# $dep:')) {
+                isTargetDep = true;
+                targetDepName = dep;
+                break;
+              }
+            }
+
+            if (isTargetDep && targetDepName != null) {
+              // 删除原有的依赖行
+              // 检查下一行是否是路径依赖的第二行
+              if (i + 1 < lines.length) {
+                final nextLine = lines[i + 1].trim();
+                if (nextLine.startsWith('path:') ||
+                    nextLine.startsWith('# path:')) {
+                  skipNextLine = true;
+                }
+              }
+
+              // 添加新的依赖配置
+              final pathDep = pathDependencies[module];
+              if (devMode && pathDep != null) {
+                // 开发模式：添加路径依赖
+                updatedLines.add('  $targetDepName:');
+                updatedLines.add('    path: $pathDep');
+                print('  ✅ $module: 已设置 $targetDepName 为路径依赖模式 ($pathDep)');
+              } else {
+                // 生产模式：添加版本依赖
+                updatedLines.add('  $targetDepName: ^$newVersion');
+                print('  ✅ $module: 已设置 $targetDepName 为版本依赖模式 (^$newVersion)');
+              }
+            } else {
+              // 保留其他行
+              updatedLines.add(line);
+            }
+          } else {
+            // 不在目标配置段内，保留原行
+            updatedLines.add(line);
           }
         }
 
+        final updatedContent = updatedLines.join('\n');
         _writePubspecContent(modulePath, updatedContent);
       } catch (e) {
         print('  ❌ $module: 依赖更新失败 - $e');
@@ -178,7 +257,11 @@ class VersionSyncTool {
   /// 执行版本同步
   Future<void> syncVersions() async {
     print('=========================');
-    print(' Fall Core 版本同步脚本');
+    if (devMode) {
+      print(' Fall Core 开发模式切换脚本');
+    } else {
+      print(' Fall Core 版本同步脚本');
+    }
     print('=========================\n');
 
     // 检查项目根目录
@@ -189,67 +272,117 @@ class VersionSyncTool {
     // 显示当前版本
     showCurrentVersions();
 
-    // 获取新版本号
-    final newVersion = _getUserInput();
-    if (newVersion == null || newVersion.isEmpty) {
-      print('❌ 版本号不能为空');
-      exit(1);
+    String? newVersion;
+
+    if (devMode) {
+      // 开发模式不需要版本号，使用当前版本
+      final versions = getCurrentVersions();
+      newVersion = versions['fall_core_base'] ?? '0.0.6';
+      print('\n📝 [信息] 开发模式: 使用本地路径依赖，保持当前版本: $newVersion');
+    } else {
+      // 获取新版本号
+      newVersion = _getUserInput();
+      if (newVersion == null || newVersion.isEmpty) {
+        print('❌ 版本号不能为空');
+        exit(1);
+      }
+
+      // 验证版本号格式
+      if (!_isValidVersion(newVersion)) {
+        print('❌ 版本号格式不正确，请使用 x.y.z 格式 (如: 1.0.0, 0.0.3)');
+        print('   您输入的版本号: $newVersion');
+        exit(1);
+      }
     }
 
-    // 验证版本号格式
-    if (!_isValidVersion(newVersion)) {
-      print('❌ 版本号格式不正确，请使用 x.y.z 格式 (如: 1.0.0, 0.0.3)');
-      print('   您输入的版本号: $newVersion');
-      exit(1);
+    if (devMode) {
+      print('\n📝 [信息] 切换到开发模式（使用本地路径依赖）');
+    } else {
+      print('\n📝 [信息] 将所有模块版本号更新为: $newVersion');
     }
-
-    print('\n📝 [信息] 将所有模块版本号更新为: $newVersion');
     print('========================================');
 
     // 更新所有模块版本
     bool allSuccess = true;
     final updateResults = <String, bool>{};
 
-    for (String module in modules) {
-      print('[更新] $module...');
-      final success = _updateModuleVersion(module, newVersion);
-      updateResults[module] = success;
-      if (!success) allSuccess = false;
+    if (!devMode) {
+      // 只有非开发模式才更新版本号
+      for (String module in modules) {
+        print('[更新] $module...');
+        final success = _updateModuleVersion(module, newVersion!);
+        updateResults[module] = success;
+        if (!success) allSuccess = false;
+      }
+    } else {
+      // 开发模式不更新版本号
+      for (String module in modules) {
+        updateResults[module] = true;
+      }
     }
 
     // 更新依赖关系
-    final depSuccess = _updateDependencies(newVersion);
+    final depSuccess = _updateDependencies(newVersion!);
     if (!depSuccess) allSuccess = false;
 
     // 显示结果摘要
     print('\n==========================================');
     if (allSuccess) {
-      print(' 🎉 版本同步完成！');
+      if (devMode) {
+        print(' 🎉 开发模式切换完成！');
+      } else {
+        print(' 🎉 版本同步完成！');
+      }
     } else {
-      print(' ⚠️  版本同步部分完成（有错误）');
+      if (devMode) {
+        print(' ⚠️  开发模式切换部分完成（有错误）');
+      } else {
+        print(' ⚠️  版本同步部分完成（有错误）');
+      }
     }
     print('==========================================');
 
-    print('📦 所有模块版本号已更新为: $newVersion');
-    if (depSuccess) {
-      print('🔗 模块间依赖关系已同步更新');
+    if (devMode) {
+      print('📦 已切换到开发模式（使用本地路径依赖）');
+      print('🔗 模块间依赖关系已切换为本地路径');
+    } else {
+      print('📦 所有模块版本号已更新为: $newVersion');
+      if (depSuccess) {
+        print('🔗 模块间依赖关系已同步更新');
+      }
     }
 
     print('\n📝 下一步建议:');
-    print(
-      '1. 检查并提交版本变更: git add . && git commit -m "chore: bump version to $newVersion"',
-    );
-    print('2. 更新各模块的 CHANGELOG.md');
-    print('3. 运行发布脚本: dart scripts/publish.dart 或 scripts/publish.bat');
-    print('4. 验证模块依赖: flutter pub deps');
+    if (devMode) {
+      print(
+        '1. 检查并提交依赖变更: git add . && git commit -m "chore: switch to dev mode (local path dependencies)"',
+      );
+      print('2. 开始本地开发: flutter pub get');
+      print('3. 切换回生产模式: dart scripts/sync_version.dart');
+    } else {
+      print(
+        '1. 检查并提交版本变更: git add . && git commit -m "chore: bump version to $newVersion"',
+      );
+      print('2. 更新各模块的 CHANGELOG.md');
+      print('3. 运行发布脚本: dart scripts/publish.dart 或 scripts/publish.bat');
+      print('4. 验证模块依赖: flutter pub deps');
+    }
 
-    print('\n📊 更新摘要:');
+    print('\n📈 更新摘要:');
     for (String module in modules) {
       final success = updateResults[module] ?? false;
       if (success) {
-        print('  ✅ $module: 成功更新至 $newVersion');
+        if (devMode) {
+          print('  ✅ $module: 已切换到开发模式');
+        } else {
+          print('  ✅ $module: 成功更新至 $newVersion');
+        }
       } else {
-        print('  ❌ $module: 更新失败');
+        if (devMode) {
+          print('  ❌ $module: 切换失败');
+        } else {
+          print('  ❌ $module: 更新失败');
+        }
       }
     }
 
@@ -271,8 +404,15 @@ class VersionSyncTool {
 }
 
 /// 主函数
-void main() async {
-  final tool = VersionSyncTool();
+void main(List<String> args) async {
+  // 检查是否传入 dev 参数
+  final bool devMode = args.contains('dev');
+
+  if (devMode) {
+    print('📝 [参数] 检测到 dev 参数，将切换到开发模式');
+  }
+
+  final tool = VersionSyncTool(devMode: devMode);
   try {
     await tool.syncVersions();
   } catch (e) {

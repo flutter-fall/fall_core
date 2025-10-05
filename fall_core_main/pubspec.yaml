@@ -1,6 +1,6 @@
 name: fall_core_main
 description: "Fall Core Main - Runtime components for Fall Core framework. Provides AOP services, hooks system and dependency injection utilities."
-version: 0.0.6
+version: 0.0.7
 homepage: https://github.com/flutter-fall/fall_core
 repository: https://github.com/flutter-fall/fall_core
 issue_tracker: https://github.com/flutter-fall/fall_core/issues
@@ -20,12 +20,9 @@ environment:
 # Dependencies specify other packages that your package needs in order to work.
 # 主业务模块运行时依赖
 dependencies:
+  fall_core_base: ^0.0.7
   flutter:
     sdk: flutter
-  # 核心注解和工具类
- # fall_core_base: ^0.0.6
-  fall_core_base:
-    path: ../fall_core_base
   # 依赖注入容器
   get: ^4.7.2
   # 日志支持
@@ -34,9 +31,5 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
   test: ^1.25.0
   flutter_lints: ^5.0.0
-
-
-
