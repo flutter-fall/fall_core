@@ -36,7 +36,8 @@ class TestService {
 /// 另一个命名服务，用于测试多个命名服务的情况
 @Service(name: 'namedService')
 class NamedService {
+  static final Logger _logger = LoggerFactory.getBusinessLogger();
   void performAction() {
-    print('NamedService.performAction called');
+    _logger.i('NamedService.performAction called');
   }
 }
