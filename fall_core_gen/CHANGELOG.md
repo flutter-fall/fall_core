@@ -5,6 +5,27 @@ All notable changes to the fall_core_gen package will be documented in this file
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.6] - 2025-10-05
+
+### 🚀 Major Refactoring
+- **Builder 架构重构**: 将 LibraryBuilder 更改为 PartBuilder
+  - 解决与其他代码生成器的冲突问题
+  - 优化代码生成的默认输出路径
+  - 提升构建系统的稳定性和兼容性
+
+### 🔧 Enhanced Features
+- **路径优化**: 调整默认生成路径配置
+- **兼容性改进**: 更好地支持复杂项目结构
+
+### 📦 Breaking Changes
+⚠️ **构建方式变更**: 生成文件方式从 Library 改为 Part
+- 需要更新生成文件的引用方式
+- 建议执行 `build_runner clean` 后重新构建
+
+### ✨ Benefits
+- 🚀 **更好的生态**: 与 Dart 代码生成生态更好集成
+- 🔧 **冲突解决**: 避免与其他 builder 的冲突
+
 ## [0.0.5] - 2025-10-04
 
 ### 🔧 Bug Fixes
