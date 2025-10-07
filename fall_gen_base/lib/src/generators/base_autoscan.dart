@@ -14,6 +14,8 @@ import '../utils/gen_util.dart';
 abstract class BaseAutoScan<T extends ServiceInfoBase>
     extends GeneratorForAnnotation<AutoScan> {
   final bool debug;
+  static final _logger = LoggerFactory.getFrameworkLogger();
+
   BaseAutoScan({this.debug = false});
 
   /// 步骤1：读取@AutoScan注解参数
@@ -36,11 +38,6 @@ abstract class BaseAutoScan<T extends ServiceInfoBase>
     final includePatterns = GenUtil.readList(annotation, 'include', [
       'lib/**/*.dart',
     ]);
-    if (debug) {
-      includePatterns.forEach((p) {
-        print(p);
-      });
-    }
     final excludePatterns = GenUtil.readList(annotation, 'exclude', [
       '**/*.g.dart',
       '**/*.freezed.dart',
@@ -77,9 +74,9 @@ abstract class BaseAutoScan<T extends ServiceInfoBase>
       return TypeChecker.typeNamed(Service);
     }).toList();
     if (debug) {
-      typeCheckers.forEach((checker) {
-        print(checker.toString());
-      });
+      for (final checker in typeCheckers) {
+        _logger.d('TypeChecker: $checker');
+      }
     }
     // 为每个include模式创建Glob并扫描
     for (final includePattern in includePatterns) {
@@ -100,7 +97,7 @@ abstract class BaseAutoScan<T extends ServiceInfoBase>
             for (final clazz in libraryReader.classes) {
               if (typeChecker.hasAnnotationOf(clazz)) {
                 if (debug) {
-                  print(
+                  _logger.d(
                     '${clazz.displayName} has annotation:${typeChecker.toString()}',
                   );
                 }
@@ -191,7 +188,9 @@ abstract class BaseAutoScan<T extends ServiceInfoBase>
     // 收集服务文件导入
     final importPaths = <String>{};
     for (final service in services) {
-      print(service.inputUri.toString());
+      if (debug) {
+        _logger.d('Processing service: ${service.inputUri}');
+      }
       final relativePath = GenUtil.getImportPath(service.inputUri, sourceUri);
       importPaths.add(relativePath);
 
