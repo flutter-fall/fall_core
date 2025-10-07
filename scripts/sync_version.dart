@@ -1,25 +1,27 @@
 #!/usr/bin/env dart
 
 import 'dart:io';
-import 'dart:convert';
 
 /// Fall Core 版本同步脚本 (Dart 版本)
 /// 统一更新所有模块的版本号和依赖关系
 class VersionSyncTool {
   static const List<String> modules = [
     'fall_core_base',
+    'fall_gen_base',
     'fall_core_gen',
     'fall_core_main',
   ];
 
   static const Map<String, List<String>> dependencies = {
-    'fall_core_gen': ['fall_core_base'],
+    'fall_gen_base': ['fall_core_base'],
+    'fall_core_gen': ['fall_core_base', 'fall_gen_base', 'fall_core_main'],
     'fall_core_main': ['fall_core_base'],
   };
 
   static const Map<String, String> pathDependencies = {
-    'fall_core_gen': '../fall_core_base',
-    'fall_core_main': '../fall_core_base',
+    'fall_gen_base': '../fall_gen_base',
+    'fall_core_gen': '../fall_core_gen',
+    'fall_core_base': '../fall_core_base',
   };
 
   late Directory rootDir;
@@ -205,7 +207,8 @@ class VersionSyncTool {
               }
 
               // 添加新的依赖配置
-              final pathDep = pathDependencies[module];
+
+              final pathDep = pathDependencies[targetDepName];
               if (devMode && pathDep != null) {
                 // 开发模式：添加路径依赖
                 updatedLines.add('  $targetDepName:');

@@ -14,8 +14,12 @@ Builder aopGenerator(BuilderOptions options) {
 }
 
 Builder serviceAutoScan(BuilderOptions options) {
+  bool debug = false;
+  if (options.config['debug'] == true) {
+    debug = true;
+  }
   return LibraryBuilder(
-    ServiceAutoScan(),
+    ServiceAutoScan(debug: debug),
     generatedExtension: '.g.dart',
     options: options,
   );

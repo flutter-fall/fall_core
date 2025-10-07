@@ -14,13 +14,15 @@ import 'dart:async';
 class PublishTool {
   static const List<String> allModules = [
     'fall_core_base',
+    'fall_gen_base',
     'fall_core_gen',
     'fall_core_main',
   ];
 
-  /// 按依赖顺序定义发布顺序：必须先发布 fall_core_base
+  /// 按依赖顺序定义发布顺序：必须先发布 fall_core_base，然后 fall_gen_base
   static const List<String> publishOrder = [
     'fall_core_base',
+    'fall_gen_base',
     'fall_core_gen',
     'fall_core_main',
   ];
@@ -43,12 +45,13 @@ class PublishTool {
 使用说明:
   dart scripts/publish.dart      - 发布所有模块
   dart scripts/publish.dart 1    - 仅发布 fall_core_base
-  dart scripts/publish.dart 2    - 发布 fall_core_gen 和 fall_core_main
+  dart scripts/publish.dart 2    - 发布 fall_core_base 和 fall_gen_base
+  dart scripts/publish.dart 3    - 发布 fall_core_gen 和 fall_core_main
   dart scripts/publish.dart help - 显示此帮助信息
 
 注意事项:
   • 发布前请确保所有更改已提交到 Git
-  • 模块将按依赖顺序自动发布：base → gen → main
+  • 模块将按依赖顺序自动发布：base → gen_base → gen → main
   • 需要有 pub.dev 发布权限
   • 建议在发布前运行版本同步脚本
 ''');
@@ -70,6 +73,11 @@ class PublishTool {
       publishSequence = ['fall_core_base'];
       print('[信息] 模式: 仅发布 fall_core_base');
     } else if (args[0] == '2') {
+      // 发布 fall_core_base 和 fall_gen_base
+      modulesToPublish = ['fall_core_base', 'fall_gen_base'];
+      publishSequence = ['fall_core_base', 'fall_gen_base'];
+      print('[信息] 模式: 发布 fall_core_base 和 fall_gen_base');
+    } else if (args[0] == '3') {
       // 发布 fall_core_gen 和 fall_core_main
       modulesToPublish = ['fall_core_gen', 'fall_core_main'];
       publishSequence = ['fall_core_gen', 'fall_core_main'];

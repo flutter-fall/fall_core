@@ -22,6 +22,7 @@ targets:
           - test/services/**
       fall_core_gen|service_autoscan:
         enabled: true
+        options: {debug: true}
         generate_for:
           - test/init/**
 

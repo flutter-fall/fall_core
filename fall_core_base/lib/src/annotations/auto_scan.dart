@@ -1,3 +1,5 @@
+import 'package:fall_core_base/src/annotations/service.dart';
+
 /// AutoScan注解，用于配置代码生成器的扫描范围
 ///
 /// 这个注解仅用于配置，实际的扫描功能由fall_gen项目实现
@@ -24,10 +26,10 @@ class AutoScan {
   /// - 'lib/generated/**' : 排除generated目录下的所有文件
   /// - '**/test/**' : 排除所有test目录
   final List<String> exclude;
-  final List<String> annotations;
+  final List<Type> annotations;
   const AutoScan({
     this.include = const ['lib/**/*.dart'],
     this.exclude = const ['**/*.g.dart', '**/*.freezed.dart'],
-    this.annotations = const ['Service'],
+    this.annotations = const [Service],
   });
 }

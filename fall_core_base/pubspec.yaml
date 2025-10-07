@@ -1,6 +1,6 @@
 name: fall_core_base
 description: "Fall Core Base - Core annotations and utilities for Fall Core framework. Provides @Service, @Auto, @Aop annotations and basic utilities."
-version: 0.0.7
+version: 0.0.8
 homepage: https://github.com/flutter-fall/fall_core
 repository: https://github.com/flutter-fall/fall_core
 issue_tracker: https://github.com/flutter-fall/fall_core/issues
@@ -20,14 +20,10 @@ environment:
 # Dependencies specify other packages that your package needs in order to work.
 # 核心库保持零外部依赖（除Flutter SDK外）以实现轻量化设计
 dependencies:
-  flutter:
-    sdk: flutter
   # 元数据注解支持
   meta: ^1.15.0
   # 日志支持
   logger: ^2.6.1
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
   flutter_lints: ^4.0.0
 

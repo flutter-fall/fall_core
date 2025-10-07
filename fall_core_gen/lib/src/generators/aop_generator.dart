@@ -2,9 +2,9 @@ import 'dart:async';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
 import 'package:code_builder/code_builder.dart';
-import '../utils/gen_util.dart';
 import 'package:source_gen/source_gen.dart' hide LibraryBuilder;
 import 'package:fall_core_base/fall_core_base.dart';
+import 'package:fall_gen_base/fall_gen_base.dart';
 
 /// AOP代码生成器
 ///
