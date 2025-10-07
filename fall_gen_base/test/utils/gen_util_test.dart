@@ -832,11 +832,8 @@ void main() {
         test(
           'should return default value when annotation read throws exception',
           () {
-            // Arrange
+            // Arrange & Act & Assert
             // 测试GenUtil.readList方法的错误处理能力
-            final defaultValue = ['default1', 'default2'];
-
-            // Act & Assert
             // 验证当传入无效的ConstantReader时，方法会捕获异常并返回默认值
             expect(() {
               MockConstantReader.simulateReadList<String>();
@@ -849,6 +846,11 @@ void main() {
           final stringDefault = <String>['test'];
           final intDefault = <int>[1, 2, 3];
           final boolDefault = <bool>[true, false];
+
+          // 验证不同泛型参数的默认值类型正确
+          expect(stringDefault, isA<List<String>>());
+          expect(intDefault, isA<List<int>>());
+          expect(boolDefault, isA<List<bool>>());
 
           // 验证方法可以使用不同的泛型类型
           expect(() {
@@ -884,8 +886,6 @@ void main() {
 
         test('should handle null safety correctly', () {
           // 验证方法参数和返回值的空安全性
-          final defaultValue = <String>['default'];
-
           // 测试方法在异常情况下的行为
           expect(() {
             MockConstantReader.simulateReadList<String>();
