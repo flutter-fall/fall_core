@@ -5,6 +5,21 @@ All notable changes to the fall_core_base package will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.8] - 2025-10-07
+
+### 🏗️ Architecture
+- **模块重构**: 部分公共逻辑迁移至新的 fall_gen_base 模块
+- **版本管理优化**: 改进版本同步机制，提升发布流程效率
+
+### 🔧 Improvements
+- **代码结构**: 优化模块间依赖关系，提升可维护性
+- **构建优化**: 配合 fall_gen_base 模块重构，提升代码生成效率
+
+### ✨ Highlights
+- 🔧 **无破坏性变更**: 所有现有 API 和功能保持不变
+- 📦 **完全兼容**: 与 fall_core_gen 0.0.8+ 和 fall_core_main 0.0.8+ 协同升级
+- 🚀 **性能提升**: 受益于模块重构和优化
+
 ## [0.0.7] - 2025-10-05
 
 ### 🔄 Version Management

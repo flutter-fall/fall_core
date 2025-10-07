@@ -20,8 +20,7 @@ environment:
 # Dependencies specify other packages that your package needs in order to work.
 # 代码生成器模块依赖
 dependencies:
-  fall_core_base:
-    path: ../fall_core_base
+  fall_core_base: ^0.0.8
   # 代码生成相关依赖
   source_gen: ^4.0.1
   code_builder: ^4.10.1

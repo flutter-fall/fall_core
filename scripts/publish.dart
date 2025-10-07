@@ -74,14 +74,19 @@ class PublishTool {
       print('[信息] 模式: 仅发布 fall_core_base');
     } else if (args[0] == '2') {
       // 发布 fall_core_base 和 fall_gen_base
-      modulesToPublish = ['fall_core_base', 'fall_gen_base'];
-      publishSequence = ['fall_core_base', 'fall_gen_base'];
-      print('[信息] 模式: 发布 fall_core_base 和 fall_gen_base');
+      modulesToPublish = ['fall_gen_base'];
+      publishSequence = ['fall_gen_base'];
+      print('[信息] 模式: 发布 fall_gen_base');
     } else if (args[0] == '3') {
       // 发布 fall_core_gen 和 fall_core_main
-      modulesToPublish = ['fall_core_gen', 'fall_core_main'];
-      publishSequence = ['fall_core_gen', 'fall_core_main'];
-      print('[信息] 模式: 发布 fall_core_gen 和 fall_core_main');
+      modulesToPublish = ['fall_core_main'];
+      publishSequence = ['fall_core_main'];
+      print('[信息] 模式: 发布 fall_core_main');
+    } else if (args[0] == '4') {
+      // 发布 fall_core_gen 和 fall_core_main
+      modulesToPublish = ['fall_core_gen'];
+      publishSequence = ['fall_core_gen'];
+      print('[信息] 模式: 发布 fall_core_gen');
     } else {
       print('❌ 无效参数: ${args[0]}');
       print('使用 "dart scripts/publish.dart help" 查看帮助信息');

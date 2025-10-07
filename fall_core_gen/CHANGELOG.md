@@ -5,6 +5,25 @@ All notable changes to the fall_core_gen package will be documented in this file
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.8] - 2025-10-07
+
+### 🔄 Dependencies
+- **新依赖模块**: 引入 fall_gen_base ^0.0.8 作为新的依赖
+- **模块化重构**: 配合公共逻辑迁移至 fall_gen_base 模块
+
+### 🏗️ Architecture
+- **代码组织优化**: 重构代码结构，提升可维护性
+- **共享逻辑抽取**: 将公共生成器逻辑迁移至专用模块
+
+### 🔧 Improvements
+- **构建效率**: 受益于模块重构，提升代码生成效率
+- **版本管理**: 优化依赖管理和版本同步机制
+
+### ✨ Highlights
+- 🔧 **无破坏性变更**: 所有现有 API 和功能保持不变
+- 📦 **完全兼容**: 与 fall_core_base 0.0.8+ 和 fall_core_main 0.0.8+ 协同升级
+- 🚀 **性能提升**: 受益于模块化重构和优化
+
 ## [0.0.7] - 2025-10-05
 
 ### 🚀 Code Generation Enhancement

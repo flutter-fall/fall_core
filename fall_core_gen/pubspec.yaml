@@ -20,10 +20,8 @@ environment:
 # Dependencies specify other packages that your package needs in order to work.
 # 代码生成器模块依赖
 dependencies:
-  fall_core_base:
-    path: ../fall_core_base
-  fall_gen_base:
-    path: ../fall_gen_base
+  fall_core_base: ^0.0.8
+  fall_gen_base: ^0.0.8
   # 代码生成相关依赖
   source_gen: ^4.0.1
   code_builder: ^4.10.1
@@ -41,5 +39,4 @@ dev_dependencies:
   test: ^1.26.3
   flutter_lints: ^5.0.0
   get: ^4.7.2
-  fall_core_main:
-    path: ../fall_core_main
+  fall_core_main: ^0.0.8
