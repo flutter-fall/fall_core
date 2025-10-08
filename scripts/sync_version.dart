@@ -22,6 +22,7 @@ class VersionSyncTool {
     'fall_gen_base': '../fall_gen_base',
     'fall_core_gen': '../fall_core_gen',
     'fall_core_base': '../fall_core_base',
+    'fall_core_main': '../fall_core_main',
   };
 
   late Directory rootDir;

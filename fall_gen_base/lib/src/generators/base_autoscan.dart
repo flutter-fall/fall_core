@@ -6,6 +6,7 @@ import 'package:source_gen/source_gen.dart';
 import 'package:glob/glob.dart';
 import 'package:fall_core_base/fall_core_base.dart';
 import '../utils/gen_util.dart';
+import '../utils/log_util.dart';
 
 /// 自动扫描代码生成器的抽象基类
 ///
@@ -14,8 +15,6 @@ import '../utils/gen_util.dart';
 abstract class BaseAutoScan<T extends ServiceInfoBase>
     extends GeneratorForAnnotation<AutoScan> {
   final bool debug;
-  static final _logger = LoggerFactory.getFrameworkLogger();
-
   BaseAutoScan({this.debug = false});
 
   /// 步骤1：读取@AutoScan注解参数
@@ -30,6 +29,7 @@ abstract class BaseAutoScan<T extends ServiceInfoBase>
     ConstantReader annotation,
     BuildStep buildStep,
   ) async {
+    LogUtil.debug = debug;
     // 只处理类
     if (element is! ClassElement) {
       throw InvalidGenerationSourceError('@AutoScan注解只能用于类', element: element);
@@ -71,12 +71,10 @@ abstract class BaseAutoScan<T extends ServiceInfoBase>
 
     // 创建TypeChecker列表，使用fromUrl方式
     final typeCheckers = annotations.map((annotation) {
-      return TypeChecker.typeNamed(Service);
+      return TypeChecker.typeNamed(annotation);
     }).toList();
-    if (debug) {
-      for (final checker in typeCheckers) {
-        _logger.d('TypeChecker: $checker');
-      }
+    for (final checker in typeCheckers) {
+      LogUtil.d('TypeChecker: $checker');
     }
     // 为每个include模式创建Glob并扫描
     for (final includePattern in includePatterns) {
@@ -96,12 +94,9 @@ abstract class BaseAutoScan<T extends ServiceInfoBase>
           for (final typeChecker in typeCheckers) {
             for (final clazz in libraryReader.classes) {
               if (typeChecker.hasAnnotationOf(clazz)) {
-                if (debug) {
-                  _logger.d(
-                    '${clazz.displayName} has annotation:${typeChecker.toString()}',
-                  );
-                }
-
+                LogUtil.d(
+                  '${clazz.displayName} has annotation:${typeChecker.toString()}',
+                );
                 services.addAll(
                   process(
                     clazz,
@@ -175,7 +170,7 @@ abstract class BaseAutoScan<T extends ServiceInfoBase>
     // 基础导入
     imports.addAll([
       Directive.import('package:get/get.dart'),
-      Directive.import('package:fall_core_base/fall_core_base.dart'),
+      // Directive.import('package:fall_core_base/fall_core_base.dart'),
       Directive.import('package:fall_core_main/fall_core_main.dart'),
       Directive.import(
         GenUtil.getImportPath(
@@ -188,9 +183,8 @@ abstract class BaseAutoScan<T extends ServiceInfoBase>
     // 收集服务文件导入
     final importPaths = <String>{};
     for (final service in services) {
-      if (debug) {
-        _logger.d('Processing service: ${service.inputUri}');
-      }
+      LogUtil.d('Processing service: ${service.inputUri}');
+
       final relativePath = GenUtil.getImportPath(service.inputUri, sourceUri);
       importPaths.add(relativePath);
 
