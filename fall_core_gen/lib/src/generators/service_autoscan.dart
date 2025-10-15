@@ -151,7 +151,7 @@ class ServiceInfo implements ServiceInfoBase {
     final singleton = annotation.read('singleton').boolValue;
 
     // 检查是否有@Aop注解
-    final hasAop = GenUtil.hasAnnotation(element, Aop);
+    final hasAop = AnnoUtil.hasAnnotation(element, Aop);
 
     // 收集@Auto标注的字段
     final injectableFields = InjectableField.collectInjectableFields(element);

@@ -137,7 +137,7 @@ class AopGenerator extends GeneratorForAnnotation<Aop> {
       if (method.isPrivate || method.isStatic || method.isAbstract) continue;
 
       // 检查是否有@NoAop注解
-      if (GenUtil.hasAnnotation(method, NoAop)) continue;
+      if (AnnoUtil.hasAnnotation(method, NoAop)) continue;
 
       methods.add(_generateMethod(method, allowedHooks));
     }

@@ -7,6 +7,7 @@ import 'package:glob/glob.dart';
 import 'package:fall_core_base/fall_core_base.dart';
 import '../utils/gen_util.dart';
 import '../utils/log_util.dart';
+import '../utils/anno_util.dart';
 
 /// 自动扫描代码生成器的抽象基类
 ///
@@ -35,14 +36,16 @@ abstract class BaseAutoScan<T extends ServiceInfoBase>
       throw InvalidGenerationSourceError('@AutoScan注解只能用于类', element: element);
     }
     // 步骤1：读取@AutoScan注解参数
-    final includePatterns = GenUtil.readList(annotation, 'include', [
+    final includePatterns = AnnoUtil.readList(annotation, 'include', [
       'lib/**/*.dart',
     ]);
-    final excludePatterns = GenUtil.readList(annotation, 'exclude', [
+    final excludePatterns = AnnoUtil.readList(annotation, 'exclude', [
       '**/*.g.dart',
       '**/*.freezed.dart',
     ]);
-    final annotations = GenUtil.readList(annotation, 'annotations', [Service]);
+    final annotations = AnnoUtil.readListType(annotation, 'annotations', [
+      Service,
+    ]);
     // 步骤2：根据配置扫描符合条件的文件
     final services = await scanAndProcess(
       buildStep,
@@ -64,15 +67,12 @@ abstract class BaseAutoScan<T extends ServiceInfoBase>
     BuildStep buildStep,
     List<String> includePatterns,
     List<String> excludePatterns,
-    List<Type> annotations,
+    List<TypeChecker> typeCheckers,
   ) async {
     final services = <T>[];
     final currentPackage = buildStep.inputId.package;
 
-    // 创建TypeChecker列表，使用fromUrl方式
-    final typeCheckers = annotations.map((annotation) {
-      return TypeChecker.typeNamed(annotation);
-    }).toList();
+    // 打印 TypeChecker 信息
     for (final checker in typeCheckers) {
       LogUtil.d('TypeChecker: $checker');
     }
