@@ -5,6 +5,28 @@ All notable changes to the fall_gen_base package will be documented in this file
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2025-10-15
+
+### 🚀 Refactoring
+- **工具类重构**: 将 GenUtil 拆分为 AnnoUtil 和 ClassUtil
+  - `AnnoUtil`: 专门处理注解相关逻辑
+  - `ClassUtil`: 专门处理类相关逻辑
+  - `GenUtil`: 保留通用代码生成工具
+
+### 🧹 Improvements
+- **模块化设计**: 更清晰的职责分离，提升代码可维护性
+- **测试优化**: 测试用例重构，更好的模块化覆盖
+
+### ✨ Highlights
+- 🎯 **更好的组织**: 工具类按功能分类，更易使用
+- 📦 **完全兼容**: 保持 API 向后兼容
+
+## [1.0.0] - 2025-10-08
+
+### 🎉 正式版本发布
+- **稳定版本**: Fall Gen Base 首个稳定版本
+- **生产就绪**: 经过充分测试，可用于生产环境
+
 ## [0.0.10] - 2025-10-08
 
 ### Added
