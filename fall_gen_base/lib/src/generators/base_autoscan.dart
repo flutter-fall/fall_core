@@ -137,15 +137,15 @@ abstract class BaseAutoScan<T extends ServiceInfoBase>
     final className = element.name ?? 'UnknownClass';
 
     // 生成导入
-    final imports = genImport(services, buildStep);
+    final imports = genImport(services, element, annotation, buildStep);
 
     // 生成方法列表
     final methods = <Method>[];
-    methods.add(genRegister(services));
+    methods.add(genRegister(services, element, annotation, buildStep));
 
     // 只有存在可注入字段时才生成inject方法
     if (services.any((s) => s.injectableFields.isNotEmpty)) {
-      methods.add(genInject(services));
+      methods.add(genInject(services, element, annotation, buildStep));
     }
 
     // 生成Class或Extension
@@ -163,7 +163,12 @@ abstract class BaseAutoScan<T extends ServiceInfoBase>
   }
 
   /// 4个子方法：生成导入语句
-  List<Directive> genImport(List<T> services, BuildStep buildStep) {
+  List<Directive> genImport(
+    List<T> services,
+    Element element,
+    ConstantReader annotation,
+    BuildStep buildStep,
+  ) {
     final sourceUri = buildStep.inputId.uri;
     final imports = <Directive>[];
 
@@ -189,7 +194,15 @@ abstract class BaseAutoScan<T extends ServiceInfoBase>
       importPaths.add(relativePath);
 
       // 子类可以覆盖此方法添加特定导入
-      importPaths.addAll(getAdditionalImports(service, relativePath));
+      importPaths.addAll(
+        getAdditionalImports(
+          service,
+          relativePath,
+          element,
+          annotation,
+          buildStep,
+        ),
+      );
     }
 
     for (final importPath in importPaths) {
@@ -200,7 +213,12 @@ abstract class BaseAutoScan<T extends ServiceInfoBase>
   }
 
   /// 统一的注册方法
-  Method genRegister(List<T> services) {
+  Method genRegister(
+    List<T> services,
+    Element element,
+    ConstantReader annotation,
+    BuildStep buildStep,
+  ) {
     return Method(
       (b) => b
         ..static = false
@@ -208,12 +226,19 @@ abstract class BaseAutoScan<T extends ServiceInfoBase>
         ..returns = refer('void')
         ..name = 'register'
         ..docs.add('/// 注册所有服务到GetX')
-        ..body = Code(genRegisterBody(services)),
+        ..body = Code(
+          genRegisterBody(services, element, annotation, buildStep),
+        ),
     );
   }
 
   /// 统一的注入方法
-  Method genInject(List<T> services) {
+  Method genInject(
+    List<T> services,
+    Element element,
+    ConstantReader annotation,
+    BuildStep buildStep,
+  ) {
     final servicesWithInjection = services
         .where((s) => s.injectableFields.isNotEmpty)
         .toList();
@@ -225,7 +250,9 @@ abstract class BaseAutoScan<T extends ServiceInfoBase>
         ..returns = refer('void')
         ..name = 'inject'
         ..docs.add('/// 为所有服务注入依赖')
-        ..body = Code(genInjectBody(servicesWithInjection)),
+        ..body = Code(
+          genInjectBody(servicesWithInjection, element, annotation, buildStep),
+        ),
     );
   }
 
@@ -239,16 +266,32 @@ abstract class BaseAutoScan<T extends ServiceInfoBase>
   );
 
   /// 生成注册方法的方法体
-  String genRegisterBody(List<T> services);
+  String genRegisterBody(
+    List<T> services,
+    Element element,
+    ConstantReader annotation,
+    BuildStep buildStep,
+  );
 
   /// 生成注入方法的方法体
-  String genInjectBody(List<T> services);
+  String genInjectBody(
+    List<T> services,
+    Element element,
+    ConstantReader annotation,
+    BuildStep buildStep,
+  );
 
   /// 生成Class或Extension对象
   Object genClassExtend(String className, List<Method> methods);
 
   /// 获取特定服务的额外导入路径
-  List<String> getAdditionalImports(T service, String relativePath) => [];
+  List<String> getAdditionalImports(
+    T service,
+    String relativePath,
+    Element element,
+    ConstantReader annotation,
+    BuildStep buildStep,
+  ) => [];
 }
 
 /// 服务信息基类接口

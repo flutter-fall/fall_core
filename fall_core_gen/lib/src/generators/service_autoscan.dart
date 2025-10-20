@@ -31,7 +31,13 @@ class ServiceAutoScan extends BaseAutoScan<ServiceInfo> {
   }
 
   @override
-  List<String> getAdditionalImports(ServiceInfo service, String relativePath) {
+  List<String> getAdditionalImports(
+    ServiceInfo service,
+    String relativePath,
+    Element element,
+    ConstantReader annotation,
+    BuildStep buildStep,
+  ) {
     final additionalImports = <String>[];
     if (service.hasAop) {
       final aopFilePath = relativePath.replaceAll('.dart', '.g.dart');
@@ -41,7 +47,12 @@ class ServiceAutoScan extends BaseAutoScan<ServiceInfo> {
   }
 
   @override
-  String genInjectBody(List<ServiceInfo> services) {
+  String genInjectBody(
+    List<ServiceInfo> services,
+    Element element,
+    ConstantReader annotation,
+    BuildStep buildStep,
+  ) {
     final statements = <String>[];
 
     for (final service in services) {
@@ -78,7 +89,12 @@ InjectUtil.inject<${field.fieldType}>(
   }
 
   @override
-  String genRegisterBody(List<ServiceInfo> services) {
+  String genRegisterBody(
+    List<ServiceInfo> services,
+    Element element,
+    ConstantReader annotation,
+    BuildStep buildStep,
+  ) {
     final statements = <String>[];
 
     for (final service in services) {
