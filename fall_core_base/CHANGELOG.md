@@ -5,6 +5,15 @@ All notable changes to the fall_core_base package will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] - 2025-10-20
+
+### Changed
+- 🔄 **版本同步**: 与其他模块保持版本一致性
+
+### ✨ Highlights
+- 🔧 **无破坏性变更**: 所有现有 API 和功能保持不变
+- 📦 **完全兼容**: 与框架其他模块协同升级
+
 ## [1.0.1] - 2025-10-15
 
 ### Changed

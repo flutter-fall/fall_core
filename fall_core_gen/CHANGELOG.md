@@ -5,6 +5,19 @@ All notable changes to the fall_core_gen package will be documented in this file
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] - 2025-10-20
+
+### Enhanced
+- 🚀 **AutoScan接口优化**: 改进服务自动扫描生成器接口实现
+
+### Changed
+- 🔄 **版本同步**: 与其他模块保持版本一致性
+- 📦 **依赖更新**: 升级 fall_gen_base 至 ^1.0.2
+
+### ✨ Highlights
+- 🔧 **更好的扩展性**: 优化代码生成器架构
+- 📦 **完全兼容**: 与框架其他模块协同升级
+
 ## [1.0.1] - 2025-10-15
 
 ### Changed
